@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.2.32",
+    "@jup-ag/wallet-adapter": "^0.2.6",
     "@sanity/client": "^6.21.3",
     "@sanity/image-url": "^1.0.3",
-    "@jup-ag/wallet-adapter": "^0.2.6",
     "@solana/web3.js": "^1.95.3",
     "class-variance-authority": "^0.7.0",
     "lucide-react": "^0.461.0",
@@ -29,12 +29,13 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "agentation": "^2.2.1",
+    "autoprefixer": "^10.4.20",
     "babel-plugin-react-compiler": "1.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.12",
     "postcss": "^8.4.47",
     "tailwindcss": "^3.4.13",
-    "autoprefixer": "^10.4.20",
     "typescript": "^5"
   }
 }
