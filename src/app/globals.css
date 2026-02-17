@@ -3,37 +3,115 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
-  --foreground: 220 13% 16%;
-  --muted: 220 14% 96%;
-  --muted-foreground: 219 8% 46%;
-  --border: 220 13% 91%;
-  --primary: 215 89% 56%;
-  --primary-foreground: 0 0% 100%;
-  --accent: 276 92% 72%;
-  --accent-foreground: 270 15% 20%;
-  --success: 142 71% 45%;
-  --warning: 48 96% 53%;
-  --danger: 0 84% 60%;
+  /* Dark Theme (Default) */
+  /* Brand Colors */
+  --background: #101010;
+  /* Dark BG */
+  --surface: #1A1A1A;
+  /* Card BG */
+  --surface-2: #222222;
+  /* Hover/Secondary BG */
+  --border: #2A2A2A;
+  /* Border Color */
+  --border-highlight: #3A3A3A;
+
+  --green-1: #14F195;
+  /* Primary Brand Green */
+  --green-1-hover: #0EBD74;
+  --green-2: #9945FF;
+  /* Secondary Brand Purple */
+
+  --text-primary: #FFFFFF;
+  --text-secondary: #A0A0A0;
+  --text-inverse: #000000;
+
+  /* Shadcn Mappings to Brand Colors */
+  --foreground: 0 0% 100%;
+  /* White */
+
+  --card: 0 0% 10%;
+  /* #1A1A1A (HSL approx) */
+  --card-foreground: 0 0% 100%;
+
+  --popover: 0 0% 10%;
+  /* #1A1A1A */
+  --popover-foreground: 0 0% 100%;
+
+  --primary: 155 89% 51%;
+  /* #14F195 (HSL approx) */
+  --primary-foreground: 0 0% 0%;
+
+  --secondary: 0 0% 13%;
+  /* #222222 */
+  --secondary-foreground: 0 0% 100%;
+
+  --muted: 0 0% 16%;
+  /* #2A2A2A */
+  --muted-foreground: 0 0% 63%;
+  /* #A0A0A0 */
+
+  --accent: 0 0% 13%;
+  /* #222222 */
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+
+  --input: 0 0% 16%;
+  /* #2A2A2A */
+  --ring: 155 89% 51%;
+  /* #14F195 */
+
+  --radius: 0.5rem;
+
+  --border-yellow: #FFCB20;
+
+  --green-1-hover: #275935;
+  --green-1-pressed: #1F482A;
+  --green-1-border: #5F8C6A;
+
+  --green-2-pressed: #005930;
+  --green-2-border: #2FAE79;
+
+  --bg-green-surface: #28342B;
+  --bg-green-border: #36463A;
+
+  /* Text */
+  --text-primary: #1B231D;
+  --text-inverse: #F7EACB;
+
   color-scheme: light;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: 240 6% 7%;
-    --foreground: 0 0% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 4% 65%;
-    --border: 240 4% 22%;
-    --primary: 215 89% 62%;
-    --primary-foreground: 0 0% 100%;
-    --accent: 276 92% 72%;
-    --accent-foreground: 0 0% 10%;
-    color-scheme: dark;
-  }
+.dark {
+  --background: #1B231D;
+  --surface: #28342B;
+  --surface-2: #36463A;
+  --border: #36463A;
+
+  /* Inverted semantic meanings for dark mode */
+  --text-primary: #F7EACB;
+  --text-inverse: #1B231D;
+
+  /* Adjust surface/border colors for readability in dark mode if needed, 
+     but keeping to the provided 'bg_green' tokens for now */
+
+  color-scheme: dark;
 }
 
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
+  background-color: var(--background);
+  color: var(--text-primary);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Typography Overrides */
+h1,
+h2 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
