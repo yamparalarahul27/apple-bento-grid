@@ -10,7 +10,7 @@ export default function CoursesPage() {
             {/* HERO SECTION (Light Background) */}
             <section className="bg-surface-2 py-16 px-4 md:px-8">
                 <div className="mx-auto max-w-7xl">
-                    <div className="max-w-3xl">
+                    <div className="max-w-3xl mx-auto text-center flex flex-col items-center">
                         <h1 className="text-4xl font-bold text-text-primary mb-4">
                             Learn Solana Development
                         </h1>
@@ -19,7 +19,7 @@ export default function CoursesPage() {
                         </p>
 
                         {/* Quick Filters */}
-                        <div className="flex flex-wrap gap-2 mb-8">
+                        <div className="flex flex-wrap gap-2 mb-8 justify-center">
                             {["New to Solana", "Become a Web3 Dev", "Build dApps", "Get Certified"].map(
                                 (filter) => (
                                     <button
@@ -33,7 +33,7 @@ export default function CoursesPage() {
                         </div>
 
                         {/* Search Bar */}
-                        <div className="relative mb-8 max-w-2xl">
+                        <div className="relative mb-8 max-w-2xl w-full">
                             <div className="relative flex items-center">
                                 <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-text-secondary" />
                                 <input

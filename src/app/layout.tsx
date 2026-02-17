@@ -25,6 +25,9 @@ export const metadata: Metadata = {
     siteName: "Superteam Brazil Academy",
     url: "https://x.com/SuperteamBR", //need to be changed, tell the user before deployment
   },
+  icons: {
+    icon: "/Favicon.png",
+  },
 };
 
 import { AgentationProvider } from "@/components/AgentationProvider";
@@ -39,6 +42,7 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${archivo.variable} antialiased`}
+        suppressHydrationWarning
       >
         <div className="min-h-screen bg-background text-text-primary font-sans">
           <Header />
