@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 
 import { AgentationProvider } from "@/components/AgentationProvider";
 import { Header } from "@/components/layout/Header";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export default function RootLayout({
   children,
@@ -44,11 +45,13 @@ export default function RootLayout({
         className={`${inter.variable} ${archivo.variable} antialiased`}
         suppressHydrationWarning
       >
-        <div className="min-h-screen bg-background text-text-primary font-sans">
-          <Header />
-          <main>{children}</main>
-        </div>
-        <AgentationProvider />
+        <ThemeProvider>
+          <div className="min-h-screen bg-background text-text-primary font-sans">
+            <Header />
+            <main>{children}</main>
+          </div>
+          <AgentationProvider />
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -20,14 +20,19 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet";
 
+import { ThemeController } from "@/components/design-system/ThemeController";
+
 export default function DesignSystemPage() {
     return (
         <div className="container mx-auto py-12 space-y-12">
-            <div>
-                <h1 className="text-4xl font-bold mb-4">Design System</h1>
-                <p className="text-text-secondary">
-                    Base components and style guide for Superteam Brazil Academy.
-                </p>
+            <div className="space-y-6">
+                <div>
+                    <h1 className="text-4xl font-bold mb-4">Design System</h1>
+                    <p className="text-text-secondary">
+                        Base components and style guide for Superteam Brazil Academy.
+                    </p>
+                </div>
+                <ThemeController />
             </div>
 
             {/* Colors */}
