@@ -4,12 +4,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Trophy, Medal, Award } from "lucide-react";
 
 // Mock Data
-const LEADERBOARD_MOCK = Array.from({ length: 20 }).map((_, i) => ({
+const LEADERBOARD_MOCK = Array.from({ length: 10 }).map((_, i) => ({
     rank: i + 1,
     user: {
         name: `User ${i + 1}`,
         username: `user${i + 1}`,
-        avatar: `https://i.pravatar.cc/150?u=${i}`,
+        avatar: `/pf/pf ${i + 1}.png`,
     },
     xp: 15000 - (i * 500) + Math.floor(Math.random() * 200),
     level: 20 - Math.floor(i / 3),
@@ -35,7 +35,7 @@ export default function LeaderboardPage() {
                     <TableHeader className="bg-surface-2">
                         <TableRow>
                             <TableHead className="w-[100px] text-center">Rank</TableHead>
-                            <TableHead>User</TableHead>
+                            <TableHead>Top 10</TableHead>
                             <TableHead className="text-center">Level</TableHead>
                             <TableHead className="text-center hidden sm:table-cell">Badges</TableHead>
                             <TableHead className="text-center hidden sm:table-cell">Streak</TableHead>
@@ -78,7 +78,7 @@ export default function LeaderboardPage() {
                                     <span className="text-text-secondary">🔥 {entry.streak}</span>
                                 </TableCell>
                                 <TableCell className="text-right font-mono font-bold text-primary">
-                                    {entry.xp.toLocaleString()}
+                                    {entry.xp.toLocaleString()} XP
                                 </TableCell>
                             </TableRow>
                         ))}

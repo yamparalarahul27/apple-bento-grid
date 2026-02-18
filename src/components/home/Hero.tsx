@@ -3,7 +3,7 @@ import { ArrowRight, Code2, Rocket } from "lucide-react";
 
 export function Hero() {
     return (
-        <section className="relative overflow-hidden bg-background pt-24 pb-16 md:pt-32 md:pb-24">
+        <section className="relative overflow-hidden bg-transparent pt-24 pb-16 md:pt-32 md:pb-24">
             {/* Background Elements */}
             <div className="absolute top-0 right-0 -z-10 h-[600px] w-[600px] bg-green-9/10 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/4" />
             <div className="absolute bottom-0 left-0 -z-10 h-[400px] w-[400px] bg-brand-yellow/5 blur-[100px] rounded-full -translate-x-1/3 translate-y-1/4" />
@@ -43,7 +43,7 @@ export function Hero() {
                     </div>
 
                     {/* Code Preview / Visual Placeholder */}
-                    <div className="mt-16 w-full max-w-5xl rounded-xl border border-border bg-surface shadow-2xl overflow-hidden aspect-video relative group">
+                    <div className="mt-16 w-full max-w-5xl rounded-xl border border-border bg-surface/30 backdrop-blur-md shadow-2xl overflow-hidden aspect-video relative group">
                         <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent z-10" />
                         <div className="absolute inset-0 flex items-center justify-center z-20">
                             <span className="text-h4 font-bold text-text-secondary">Interactive Code Browser Placeholder</span>

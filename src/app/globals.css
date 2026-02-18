@@ -5,7 +5,9 @@
 @layer base {
 
   /* Light Theme */
-  :root, .light, .light-theme {
+  :root,
+  .light,
+  .light-theme {
     /* RADIX Colors: Green & Gray */
     --green-1: #fbfefc;
     --green-2: #f4fbf6;
@@ -70,40 +72,46 @@
     --gray-track: #8c8c8c;
 
     /* Semantic Mappings (Shadcn/UI) */
-    --background: 0 0% 100%; /* White */
-    --foreground: 0 0% 3.9%; /* Gray-12 approx (HSL) */
+    --background: 0 0% 100%;
+    /* White */
+    --foreground: 0 0% 3.9%;
+    /* Gray-12 approx (HSL) */
 
     --card: 0 0% 100%;
     --card-foreground: 0 0% 3.9%;
- 
+
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
- 
-    --primary: 142 100% 27.5%; /* Green-9 (#008c4c) HSL: 142, 100, 27.5 approx? No, let's map directly */
+
+    --primary: 142 100% 27.5%;
+    /* Green-9 (#008c4c) HSL: 142, 100, 27.5 approx? No, let's map directly */
     /* Wait, Shadcn uses HSL values (without hsl() wrapper). 
        #008c4c -> HSL(153, 100%, 27.5%) approx? No.
        R=0, G=140, B=76 -> H=153deg, S=100%, L=27.5%
        Actually, let me use exact HSL for #008c4c: 153 100% 27%
     */
     --primary: 153 100% 27%;
-    --primary-foreground: 0 0% 98%; /* Green Contrast (White) */
- 
-    --secondary: 0 0% 96.1%; /* Gray-3 (#f0f0f0 -> HSL 0 0 94) */
+    --primary-foreground: 0 0% 98%;
+    /* Green Contrast (White) */
+
+    --secondary: 0 0% 96.1%;
+    /* Gray-3 (#f0f0f0 -> HSL 0 0 94) */
     --secondary-foreground: 0 0% 9%;
- 
+
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
- 
+
     --accent: 0 0% 96.1%;
     --accent-foreground: 0 0% 9%;
- 
+
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 0 0% 89.8%; /* Gray-6 (#d9d9d9 -> HSL 0 0 85) */
+    --border: 0 0% 89.8%;
+    /* Gray-6 (#d9d9d9 -> HSL 0 0 85) */
     --input: 0 0% 89.8%;
     --ring: 153 100% 27%;
- 
+
     --radius: 0.5rem;
 
     /* Custom Brand Variables (CSS Var Reference) */
@@ -111,10 +119,12 @@
     --brand-green-dark: #1b231d;
     --brand-yellow: #ffd23f;
     --brand-cream: #f7eacb;
+    --bg-wallpaper: url('/assets/Wallpaper_Light.png');
   }
- 
+
   /* Dark Theme */
-  .dark, .dark-theme {
+  .dark,
+  .dark-theme {
     /* RADIX Colors: Green & Gray */
     --green-1: #0a140d;
     --green-2: #101c14;
@@ -179,53 +189,80 @@
     --gray-track: #6c6e79;
 
     /* Semantic Mappings (Shadcn/UI) */
-    --background: 240 6% 7%; /* Gray-1 (#111113) -> HSL 240 6% 7% */
+    --background: 240 6% 7%;
+    /* Gray-1 (#111113) -> HSL 240 6% 7% */
     --foreground: 0 0% 98%;
 
     --card: 240 6% 7%;
     --card-foreground: 0 0% 98%;
- 
+
     --popover: 240 6% 7%;
     --popover-foreground: 0 0% 98%;
- 
-    --primary: 153 100% 27%; /* Green-9 (#008c4c) */
+
+    --primary: 153 100% 27%;
+    /* Green-9 (#008c4c) */
     --primary-foreground: 0 0% 98%;
- 
-    --secondary: 240 4% 16%; /* Gray-3 ish */
+
+    --secondary: 240 4% 16%;
+    /* Gray-3 ish */
     --secondary-foreground: 0 0% 98%;
- 
+
     --muted: 240 4% 16%;
     --muted-foreground: 240 5% 64.9%;
- 
+
     --accent: 240 4% 16%;
     --accent-foreground: 0 0% 98%;
- 
+
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
- 
-    --border: 240 4% 16%; /* Gray-6 (#393a40 -> HSL 231 6 24) */
+
+    --border: 240 4% 16%;
+    /* Gray-6 (#393a40 -> HSL 231 6 24) */
     --input: 240 4% 16%;
     --ring: 153 100% 27%;
+    --bg-wallpaper: url('/assets/Wallpaper_A.png');
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground font-sans text-body-1 antialiased;
+    @apply antialiased min-h-screen font-sans text-body-1;
+    background-image: var(--bg-wallpaper);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
-  
-  h1, h2, h3, h4, h5, h6 {
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-archivo font-bold text-text-primary;
   }
 
-  h1 { @apply text-h1; }
-  h2 { @apply text-h2; }
-  h3 { @apply text-h3; }
-  h4 { @apply text-h4; }
-  
+  h1 {
+    @apply text-h1;
+  }
+
+  h2 {
+    @apply text-h2;
+  }
+
+  h3 {
+    @apply text-h3;
+  }
+
+  h4 {
+    @apply text-h4;
+  }
+
   p {
     @apply text-body-1 leading-relaxed text-text-secondary;
   }

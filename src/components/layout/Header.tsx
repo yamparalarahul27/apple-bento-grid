@@ -81,13 +81,21 @@ export function Header() {
     const pathname = usePathname();
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-border bg-surface/80 px-4 py-3 backdrop-blur-md md:px-8">
+        <header className="sticky top-0 z-50 w-full border-b border-border bg-surface/40 px-4 py-3 backdrop-blur-md md:px-8">
             <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2">
                     <Image
-                        className="h-8 md:h-8 lg:h-8 w-auto object-contain"
+                        className="h-8 md:h-8 lg:h-8 w-auto object-contain dark:block hidden"
                         src="/Logo.png"
+                        alt="Superteam Brazil Academy"
+                        width={480}
+                        height={200}
+                        priority
+                    />
+                    <Image
+                        className="h-8 md:h-8 lg:h-8 w-auto object-contain block dark:hidden"
+                        src="/Logo_light.png"
                         alt="Superteam Brazil Academy"
                         width={480}
                         height={200}
@@ -96,15 +104,13 @@ export function Header() {
                 </Link>
 
                 {/* Search Bar */}
-                <div className="hidden flex-1 max-w-md px-8 md:block">
-                    <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            type="search"
-                            placeholder="Search courses..."
-                            className="w-full bg-surface-2 pl-9 focus-visible:ring-primary"
-                        />
-                    </div>
+                <div className="relative mx-auto hidden flex-1 px-8 md:block lg:max-w-md">
+                    <Search className="absolute left-11 top-1/2 h-4 w-4 -translate-y-1/2 text-text-secondary" />
+                    <Input
+                        type="search"
+                        placeholder="Search courses..."
+                        className="w-full bg-surface-2 pl-9 text-body-1 focus-visible:ring-primary font-medium"
+                    />
                 </div>
 
                 {/* Desktop Nav */}
@@ -112,7 +118,7 @@ export function Header() {
                     <NavigationMenu>
                         <NavigationMenuList>
                             <NavigationMenuItem>
-                                <NavigationMenuTrigger className="bg-transparent text-body-1 font-bold hover:text-primary hover:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent px-0">
+                                <NavigationMenuTrigger className="bg-transparent !text-body-1 font-bold hover:text-primary hover:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent px-0">
                                     Courses
                                 </NavigationMenuTrigger>
                                 <NavigationMenuContent>

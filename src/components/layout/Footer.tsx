@@ -30,7 +30,7 @@ const FOOTER_LINKS = [
 
 export function Footer() {
     return (
-        <footer className="w-full border-t border-border bg-surface py-12 md:py-16">
+        <footer className="w-full border-t border-border bg-transparent py-12 md:py-16">
             <div className="container px-4 md:px-6">
                 <div className="grid gap-8 lg:grid-cols-4">
                     <div className="flex flex-col gap-4">
@@ -40,7 +40,14 @@ export function Footer() {
                                 alt="Superteam Brazil Academy"
                                 width={200}
                                 height={80}
-                                className="h-12 w-auto object-contain"
+                                className="h-12 w-auto object-contain dark:block hidden"
+                            />
+                            <Image
+                                src="/Logo_light.png"
+                                alt="Superteam Brazil Academy"
+                                width={200}
+                                height={80}
+                                className="h-12 w-auto object-contain block dark:hidden"
                             />
                         </Link>
                         <p className="text-body-2 text-text-secondary max-w-xs">

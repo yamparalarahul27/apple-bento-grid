@@ -29,7 +29,7 @@ const FEATURES = [
 
 export function FeatureHighlights() {
     return (
-        <section className="py-20 md:py-24 bg-background relative">
+        <section className="py-20 md:py-24 bg-transparent relative">
             <div className="container px-4 md:px-6">
                 <div className="mb-12 text-center">
                     <h2 className="text-display-2 md:text-h1 font-bold text-text-primary mb-4">
@@ -45,7 +45,7 @@ export function FeatureHighlights() {
                     {FEATURES.map((feature, index) => (
                         <div
                             key={index}
-                            className="group relative overflow-hidden rounded-xl border border-border bg-surface p-6 transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl"
+                            className="group relative overflow-hidden rounded-xl border border-border bg-surface/30 backdrop-blur-md p-6 transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl"
                         >
                             <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-surface-2 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                                 <feature.icon className="h-6 w-6" />

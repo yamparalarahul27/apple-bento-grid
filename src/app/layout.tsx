@@ -19,11 +19,11 @@ export const metadata: Metadata = {
     template: "%s | Superteam Brazil Academy",
   },
   description: "Learn Solana development with interactive courses, code challenges, and on-chain credentials by Superteam Brazil.",
-  metadataBase: new URL("https://academy.superteambrazill.com"), // Placeholder URL
+  metadataBase: new URL("https://stbr-academy.vercel.app/"), // Placeholder URL
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://academy.superteambrazill.com",
+    url: "https://stbr-academy.vercel.app/",
     title: "Superteam Brazil Academy | Solana LMS",
     description: "Master Solana development with interactive lessons and real-world challenges.",
     siteName: "Superteam Brazil Academy",
@@ -67,7 +67,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <div className="flex min-h-screen flex-col bg-background text-text-primary font-sans">
+          <div className="flex min-h-screen flex-col text-text-primary font-sans">
             <Header />
             <main className="flex-1">{children}</main>
             <Footer />
