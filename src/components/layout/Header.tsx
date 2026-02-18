@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { WalletConnectButton } from "@/components/ui/WalletConnectButton";
 
 const NAV_ITEMS = [
     { label: "Courses", href: "/courses" },
@@ -40,7 +41,7 @@ export function Header() {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`text-lg font-bold transition-colors hover:text-primary ${isActive ? "text-primary" : "text-text-primary"
+                                className={`text-body-1 font-bold transition-colors hover:text-primary ${isActive ? "text-primary" : "text-text-primary"
                                     }`}
                             >
                                 {item.label}
@@ -51,9 +52,7 @@ export function Header() {
 
                 {/* Desktop Actions */}
                 <div className="hidden items-center gap-4 md:flex">
-                    <button className="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-md font-bold text-primary-foreground transition-colors hover:bg-green-10">
-                        Select Wallet
-                    </button>
+                    <WalletConnectButton onClick={() => { }} />
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -67,7 +66,7 @@ export function Header() {
 
             {/* Mobile Menu Overlay */}
             {isMenuOpen && (
-                <div className="fixed inset-0 z-50 flex flex-col bg-surface p-4 md:hidden">
+                <div className="fixed inset-0 z-50 flex flex-col bg-surface p-4 md:hidden animate-in slide-in-from-right-full">
                     <div className="flex items-center justify-end">
                         <button
                             className="flex items-center justify-center rounded-lg p-2 text-text-primary transition-colors hover:bg-surface-2"
@@ -83,7 +82,7 @@ export function Header() {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`border-b border-border py-4 text-lg font-bold transition-colors hover:text-primary ${isActive ? "text-primary" : "text-text-primary"
+                                    className={`border-b border-border py-4 text-h4 font-bold transition-colors hover:text-primary ${isActive ? "text-primary" : "text-text-primary"
                                         }`}
                                     onClick={() => setIsMenuOpen(false)}
                                 >
@@ -91,10 +90,8 @@ export function Header() {
                                 </Link>
                             );
                         })}
-                        <div className="pt-8">
-                            <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-lg font-bold text-primary-foreground transition-colors hover:bg-green-10">
-                                Select Wallet
-                            </button>
+                        <div className="pt-8 flex justify-center">
+                            <WalletConnectButton onClick={() => setIsMenuOpen(false)} />
                         </div>
                     </div>
                 </div>

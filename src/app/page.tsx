@@ -1,7 +1,13 @@
+import { FeatureHighlights } from "@/components/home/FeatureHighlights";
+import { Hero } from "@/components/home/Hero";
+import { Stats } from "@/components/home/Stats";
+
 export default function Home() {
   return (
-    <div className="flex min-h-[calc(100vh-64px)] items-center justify-center">
-      <h1 className="text-4xl font-bold text-text-primary">Landing Page</h1>
+    <div className="flex flex-col min-h-screen">
+      <Hero />
+      <Stats />
+      <FeatureHighlights />
     </div>
   );
 }

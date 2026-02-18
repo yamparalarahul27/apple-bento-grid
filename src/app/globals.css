@@ -214,6 +214,23 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans text-body-1 antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-archivo font-bold text-text-primary;
+  }
+
+  h1 { @apply text-h1; }
+  h2 { @apply text-h2; }
+  h3 { @apply text-h3; }
+  h4 { @apply text-h4; }
+  
+  p {
+    @apply text-body-1 leading-relaxed text-text-secondary;
+  }
+
+  small {
+    @apply text-body-2;
   }
 }

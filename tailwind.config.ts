@@ -27,6 +27,22 @@ const config: Config = {
 					'sans-serif'
 				]
 			},
+			fontSize: {
+				// Brand Kit Typography
+				'display-1': ['96px', { lineHeight: '1.1', letterSpacing: '-0.02em' }], // Headline 1
+				'display-2': ['60px', { lineHeight: '1.2', letterSpacing: '-0.01em' }], // Headline 2
+				'h1': ['48px', { lineHeight: '1.2' }], // Headline 3
+				'h2': ['34px', { lineHeight: '1.3' }], // Headline 4
+				'h3': ['24px', { lineHeight: '1.3' }], // Headline 5
+				'h4': ['20px', { lineHeight: '1.4' }], // Headline 6
+				'body-1': ['15px', { lineHeight: '1.5' }], // Body 1
+				'body-2': ['13px', { lineHeight: '1.5' }], // Body 2
+				'subtitle-1': ['16px', { lineHeight: '1.5', fontWeight: '500' }], // Subtitle 1
+				'subtitle-2': ['14px', { lineHeight: '1.5', fontWeight: '500' }], // Subtitle 2
+				'button': ['13px', { lineHeight: '1', fontWeight: '500', letterSpacing: '0.02em' }], // Button
+				'overline': ['10px', { lineHeight: '1.5', fontWeight: '700', letterSpacing: '0.05em' }], // Overline
+				'caption': ['12px', { lineHeight: '1.4' }], // Caption
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -93,6 +109,12 @@ const config: Config = {
 					12: 'var(--gray-12)',
 					a1: 'var(--gray-a1)',
 					a9: 'var(--gray-a9)',
+				},
+				// Text Colors (Fix for text-text-primary)
+				text: {
+					primary: 'hsl(var(--foreground))',
+					secondary: 'hsl(var(--muted-foreground))',
+					brand: 'hsl(var(--primary))',
 				},
 				// Brand Specific Aliases (from Brand Kit)
 				'brand-yellow': '#ffd23f',
