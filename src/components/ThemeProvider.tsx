@@ -43,6 +43,9 @@ export const LIGHT_COLORS: ThemeColors = {
     "--green-3": "#e6f8ef",  // Light Green Tint
 };
 
+// Aliased for backward compatibility
+export const DEFAULT_COLORS = DARK_COLORS;
+
 function hexToHSL(hex: string): string {
     const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
     if (!result) return "0 0% 0%";
@@ -51,7 +54,7 @@ function hexToHSL(hex: string): string {
     let b = parseInt(result[3], 16);
     r /= 255; g /= 255; b /= 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
-    let h = 0, s, l = (max + min) / 2;
+    let h = 0, s = 0, l = (max + min) / 2;
     if (max !== min) {
         const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
