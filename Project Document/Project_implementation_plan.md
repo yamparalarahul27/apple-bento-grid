@@ -1,64 +1,59 @@
-# Project Implementation Plan — Solana Academy LMS
+# Project Implementation Plan — Superteam Brazil Academy
 
 This document outlines the systematic implementation roadmap for the Superteam Brazil Academy, transitioning from static UI mocks to a fully functional, on-chain integrated learning platform.
 
 ## Current Progress Status
 - [x] **Brand Identity**: Typography, colors, and design system foundations.
-- [x] **Core UI Pages**: Landing, Catalog, Detail, Dashboard, Profile, and Leaderboard (Static/Mock).
-- [x] **Learning Engine (Visual)**: Split lesson layout and initial code editor iframe integration.
+- [x] **Settings Page**: Full profile, account, and preference management UI.
+- [x] **Certificate View**: High-fidelity visual credentials with on-chain metadata.
+- [x] **Quick Verification**: Slide-over panel with live Solana Explorer integration.
+- [x] **Navigation & Layout**: Branded 404 page, responsive headers, and dashboard thumbnails.
 
 ---
 
-## Phase 1: Dynamic UI & Identity Foundations
-*Objective: Solidify the user identity and settings framework before wiring backend logic.*
+## Phase 1: Foundation & Identity (Backend)
+*Objective: Set up the core API infrastructure and secure user authentication.*
 
-- [ ] **[NEW] Settings Page (`/settings`)**
-    - [ ] Profile Editing: UI for name, bio, avatar upload.
-    - [ ] Account Management: Wallet linking and OAuth stubs.
-    - [ ] Preferences: Language and Theme selectors.
-- [ ] **Internationalization (i18n)**
-    - [ ] Implement `next-intl` or `next-i18next`.
-    - [ ] Move all UI strings to locale files (EN, PT-BR, ES).
-- [ ] **Global State**
-    - [ ] Set up Zustand store for user session and locale-persistent settings.
+- [ ] **Infrastructure Setup**
+    - [ ] Initialize Node.js/TypeScript backend project.
+    - [ ] Configure Supabase/PostgreSQL schema (Users, Streaks, logs).
+- [ ] **Secure Authentication**
+    - [ ] Implement Nonce-based wallet signature verification.
+    - [ ] JWT issuance and refresh logic for secure session management.
 
-## Phase 2: Authentication & Backend Bridge
-*Objective: Enable secure user sessions and provide a unified interface for data fetching.*
+## Phase 2: On-Chain Service Layer
+*Objective: Enable backend-signed transactions for anti-cheat and automated rewards.*
 
-- [ ] **Wallet Authentication**
-    - [ ] Finalize Jupiter Wallet Adapter integration.
-    - [ ] Implement backend signature verification (Solana Message Signing).
-- [ ] **Service Layer Implementation**
-    - [ ] Develop `LearningProgressService` interface.
-    - [ ] Create `StubLearningProgressService` for local development.
-    - [ ] Integrate service with `/courses`, `/dashboard`, and `/profile`.
+- [ ] **Anchor Integration**
+    - [ ] Build `@coral-xyz/anchor` service layer with rotatable backend signer.
+- [ ] **Instruction Handlers**
+    - [ ] Implement `complete_lesson` (Bitmap updates).
+    - [ ] Implement `reward_xp` (Platform milestones).
 
-## Phase 3: Content & Learning Engine (Dynamic)
-*Objective: Connect the LMS to real data sources and enable progress tracking.*
+## Phase 3: Gamification & Leaderboard
+*Objective: Drive user engagement through streaks and competitive indexing.*
 
-- [ ] **Sanity CMS Integration**
-    - [ ] Connect frontend to Sanity Studio.
-    - [ ] Replace `MOCK_DATA` in catalog and detail pages with GROQ queries.
-- [ ] **Progress Tracking**
-    - [ ] Implement lesson completion logic (backend-signed transaction stubs).
-    - [ ] Update enrollment state tracking on-chain (Devnet).
+- [ ] **Streak Service**
+    - [ ] Implement persistence logic for current/longest streaks and activity logs.
+- [ ] **Helius Indexer**
+    - [ ] Integrate DAS API to fetch XP token balances.
+    - [ ] Scheduled jobs to cache global/weekly/monthly rankings.
 
-## Phase 4: Gamification & On-Chain Rewards
-*Objective: Finalize the XP and Credential systems.*
+## Phase 4: Credentials & Metaplex Core
+*Objective: Automate the issuance and evolution of soulbound NFT credentials.*
 
-- [ ] **On-Chain Identity**
-    - [ ] Fetch XP Balance from Token-2022 accounts.
-    - [ ] Fetch Metaplex Core NFTs for credentials and badges.
-- [ ] **Gamification Logic**
-    - [ ] Implement Streak system (Frontend tracking + backend persistence).
-    - [ ] Implement Leaderboard indexing (Derived from on-chain XP balances).
+- [ ] **NFT Lifecycle**
+    - [ ] Implement `issue_credential` for first-time track completion.
+    - [ ] Implement `upgrade_credential` for evolving existing assets.
+- [ ] **Achievements**
+    - [ ] Logic for claiming specialized achievement badges.
 
 ## Phase 5: Production & Distribution
-*Objective: Performance optimization and final handoff.*
+*Objective: Sync frontend, optimize performance, and final handoff.*
 
-- [ ] **Analytics & Monitoring**
-    - [ ] Integrate GA4, PostHog, and Sentry.
-- [ ] **Documentation**
-    - [ ] Finalize `README.md`, `ARCHITECTURE.md`, and `CMS_GUIDE.md`.
+- [ ] **Frontend-Backend Sync**
+    - [ ] Swap UI stubs for live Backend API calls.
+    - [ ] Sanity CMS dynamic content integration.
 - [ ] **Final Polish**
-    - [ ] SEO Metadata, Page Transitions, and Lighthouse Audits.
+    - [ ] Sentry error monitoring and final Devnet verification.
+    - [ ] SEO Metadata and Lighthouse performance audits.
