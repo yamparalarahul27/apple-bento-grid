@@ -8,6 +8,7 @@ import { useState } from "react";
 import { WalletConnectButton } from "@/components/ui/WalletConnectButton";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "./ThemeToggle";
+import { SuccessModal } from "@/components/ui/SuccessModal";
 
 import {
     NavigationMenu,
@@ -76,9 +77,49 @@ const ListItem = React.forwardRef<
 })
 ListItem.displayName = "ListItem"
 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { User, Settings, LogOut } from "lucide-react";
+
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isConnected, setIsConnected] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
     const pathname = usePathname();
+
+    // Persist mock connection state
+    React.useEffect(() => {
+        const connected = localStorage.getItem("mock_connected") === "true";
+        setIsConnected(connected);
+
+        const handleStorageChange = () => {
+            setIsConnected(localStorage.getItem("mock_connected") === "true");
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+        return () => window.removeEventListener("storage", handleStorageChange);
+    }, []);
+
+    const handleConnect = () => {
+        // Mock connection logic
+        localStorage.setItem("mock_connected", "true");
+        setShowSuccess(true);
+        setIsConnected(true);
+        setIsMenuOpen(false);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("mock_connected");
+        window.dispatchEvent(new Event("storage"));
+        setIsConnected(false);
+        window.location.href = "/";
+    };
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-border bg-surface/40 px-4 py-3 backdrop-blur-md md:px-8">
@@ -157,7 +198,48 @@ export function Header() {
                 {/* Desktop Actions */}
                 <div className="hidden items-center gap-4 md:flex">
                     <ThemeToggle />
-                    <WalletConnectButton onClick={() => { }} />
+                    {isConnected ? (
+                        <DropdownMenu>
+                            <DropdownMenuTrigger className="relative group outline-none">
+                                <div className="w-10 h-10 rounded-full border-2 border-primary overflow-hidden transition-all hover:scale-105 active:scale-95 group-hover:shadow-[0_0_15px_rgba(20,241,149,0.4)]">
+                                    <Image
+                                        src="/pf/pf 1.png"
+                                        alt="User Profile"
+                                        width={40}
+                                        height={40}
+                                        className="object-cover"
+                                    />
+                                </div>
+                                <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-surface animate-pulse" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-56 bg-surface border-border p-2">
+                                <DropdownMenuLabel className="text-text-primary px-2 py-1.5 font-bold">My Account</DropdownMenuLabel>
+                                <DropdownMenuSeparator className="bg-border" />
+                                <DropdownMenuItem asChild>
+                                    <Link href="/profile" className="flex items-center gap-2 px-2 py-2 text-text-secondary hover:text-primary cursor-pointer focus:bg-surface-2">
+                                        <User className="w-4 h-4" />
+                                        Profile
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem asChild>
+                                    <Link href="/settings" className="flex items-center gap-2 px-2 py-2 text-text-secondary hover:text-primary cursor-pointer focus:bg-surface-2">
+                                        <Settings className="w-4 h-4" />
+                                        Settings
+                                    </Link>
+                                </DropdownMenuItem>
+                                <DropdownMenuSeparator className="bg-border" />
+                                <DropdownMenuItem
+                                    onClick={handleLogout}
+                                    className="flex items-center gap-2 px-2 py-2 text-red-500 hover:text-red-600 cursor-pointer focus:bg-red-500/10"
+                                >
+                                    <LogOut className="w-4 h-4" />
+                                    Logout
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    ) : (
+                        <WalletConnectButton onClick={handleConnect} />
+                    )}
                 </div>
 
                 {/* Mobile Menu Button */}
@@ -195,12 +277,58 @@ export function Header() {
                                 </Link>
                             );
                         })}
-                        <div className="pt-8 flex justify-center">
-                            <WalletConnectButton onClick={() => setIsMenuOpen(false)} />
+                        <div className="pt-8 flex flex-col gap-4">
+                            {isConnected ? (
+                                <>
+                                    <Link
+                                        href="/profile"
+                                        className="flex items-center gap-3 bg-surface-2 border border-border p-4 rounded-xl w-full"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <div className="w-12 h-12 rounded-full border-2 border-primary overflow-hidden">
+                                            <Image
+                                                src="/pf/pf 1.png"
+                                                alt="User Profile"
+                                                width={48}
+                                                height={48}
+                                                className="object-cover"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-bold text-text-primary">Rahul Yamparala</span>
+                                            <span className="text-sm text-text-secondary">View Profile</span>
+                                        </div>
+                                    </Link>
+                                    <Link
+                                        href="/settings"
+                                        className="flex items-center gap-3 bg-surface-2 border border-border p-4 rounded-xl w-full"
+                                        onClick={() => setIsMenuOpen(false)}
+                                    >
+                                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                            <Settings className="w-6 h-6" />
+                                        </div>
+                                        <div className="flex flex-col">
+                                            <span className="font-bold text-text-primary">Settings</span>
+                                            <span className="text-sm text-text-secondary">Manage Account</span>
+                                        </div>
+                                    </Link>
+                                    <button
+                                        onClick={handleLogout}
+                                        className="flex items-center justify-center gap-2 bg-red-500/10 border border-red-500/20 p-4 rounded-xl w-full text-red-500 font-bold"
+                                    >
+                                        <LogOut className="w-5 h-5" />
+                                        Logout
+                                    </button>
+                                </>
+                            ) : (
+                                <WalletConnectButton onClick={handleConnect} />
+                            )}
                         </div>
                     </div>
                 </div>
             )}
+
+            <SuccessModal isOpen={showSuccess} onClose={() => setShowSuccess(false)} />
         </header>
     );
 }

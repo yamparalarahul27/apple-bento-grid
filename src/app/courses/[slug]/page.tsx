@@ -28,26 +28,26 @@ const COURSE_CONTENT_MOCK: Record<string, CourseWithModules> = {
                 id: "m1",
                 title: "Introduction to Solana",
                 lessons: [
-                    { id: "l1", title: "History & Philosophy", type: "reading", duration: "10 min" },
-                    { id: "l2", title: "Proof of History Explained", type: "video", duration: "15 min" },
-                    { id: "l3", title: "Setting up your Environment", type: "reading", duration: "20 min" },
+                    { id: "l-1-1", title: "What is Solana?", type: "reading", duration: "10 min" },
+                    { id: "l-1-2", title: "Setup Local Environment", type: "reading", duration: "45 min" },
+                    { id: "l-1-3", title: "Wallet Basics", type: "reading", duration: "15 min" },
                 ]
             },
             {
                 id: "m2",
-                title: "Core Concepts",
+                title: "Accounts & Transactions",
                 lessons: [
-                    { id: "l4", title: "Accounts Model", type: "reading", duration: "15 min" },
-                    { id: "l5", title: "Transactions & Instructions", type: "reading", duration: "20 min" },
-                    { id: "l6", title: "Read data from the network", type: "challenge", duration: "30 min" },
+                    { id: "l-2-1", title: "The Account Model", type: "reading", duration: "25 min" },
+                    { id: "l-2-2", title: "Rent & Storage", type: "reading", duration: "20 min" },
+                    { id: "l-2-3", title: "Transaction Instructions", type: "challenge", duration: "30 min" },
                 ]
             },
             {
                 id: "m3",
-                title: "Building your first Program",
+                title: "Programs (Smart Contracts)",
                 lessons: [
-                    { id: "l7", title: "Native Programs vs Anchor", type: "video", duration: "10 min" },
-                    { id: "l8", title: "Hello World in Playground", type: "challenge", duration: "45 min" },
+                    { id: "l-3-1", title: "Hello World Program", type: "reading", duration: "45 min" },
+                    { id: "l-3-2", title: "Deploying to Devnet", type: "challenge", duration: "30 min" },
                 ]
             }
         ]
@@ -110,7 +110,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
 
             <div className="container px-4 md:px-6 mt-12 grid grid-cols-1 lg:grid-cols-3 gap-12">
                 <div className="lg:col-span-2">
-                    <ModuleList modules={course.moduleContent || []} />
+                    <ModuleList modules={course.moduleContent || []} courseSlug={slug} />
                 </div>
 
                 {/* Sidebar (Optional widgets: Instructor, Prerequisites, etc.) */}

@@ -1,10 +1,12 @@
-import { CheckCircle2, Lock, PlayCircle, Code2 } from "lucide-react";
+import { CheckCircle2, ChevronRight, PlayCircle, Code2 } from "lucide-react";
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from "@/components/ui/accordion";
+
+import Link from "next/link";
 
 interface Lesson {
     id: string;
@@ -21,6 +23,7 @@ export interface Module {
 
 interface ModuleListProps {
     modules: Module[];
+    courseSlug: string;
 }
 
 // Helper to render icon based on lesson type
@@ -32,7 +35,7 @@ const LessonIcon = ({ type }: { type: Lesson["type"] }) => {
     }
 }
 
-export function ModuleList({ modules }: ModuleListProps) {
+export function ModuleList({ modules, courseSlug }: ModuleListProps) {
     if (!modules || modules.length === 0) {
         return <div className="text-text-secondary">No modules available.</div>;
     }
@@ -52,7 +55,11 @@ export function ModuleList({ modules }: ModuleListProps) {
                         <AccordionContent className="px-0 pb-0">
                             <div className="flex flex-col divide-y divide-border border-t border-border">
                                 {module.lessons.map((lesson) => (
-                                    <div key={lesson.id} className="flex items-center justify-between px-6 py-4 hover:bg-surface-2/30 transition-colors group cursor-not-allowed opacity-70">
+                                    <Link
+                                        key={lesson.id}
+                                        href={`/courses/${courseSlug}/lessons/${lesson.id}`}
+                                        className="flex items-center justify-between px-6 py-4 hover:bg-surface-2/30 transition-colors group"
+                                    >
                                         <div className="flex items-center gap-3">
                                             <LessonIcon type={lesson.type} />
                                             <span className="text-body-2 font-medium text-text-primary group-hover:text-primary transition-colors">
@@ -61,9 +68,9 @@ export function ModuleList({ modules }: ModuleListProps) {
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <span className="text-caption text-text-secondary">{lesson.duration}</span>
-                                            <Lock className="h-3 w-3 text-text-secondary" />
+                                            <ChevronRight className="h-3 w-3 text-text-secondary group-hover:text-primary transition-colors" />
                                         </div>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </AccordionContent>

@@ -1,82 +1,64 @@
-# Implementation Plan — Solana Academy LMS
+# Project Implementation Plan — Solana Academy LMS
 
-This plan outlines the steps to complete the frontend implementation, prioritized to deliver the full visual experience (Part 1) before unifying the logic and backend integration (Part 2).
+This document outlines the systematic implementation roadmap for the Superteam Brazil Academy, transitioning from static UI mocks to a fully functional, on-chain integrated learning platform.
 
-## Phase 0: Brand Identity Integration (Immediate)
-- [x] **Colors**: Radix-based Green and Gray scales implemented in `globals.css` and `tailwind.config.ts`.
-- [x] **Typography**: Configure `tailwind.config.ts` to map Archivo/Inter fonts to specific Brand Kit sizes (96px, 60px, 15px, 13px, etc.).
-- [x] **Typography**: Update `globals.css` base layer to apply these font configurations to standard elements (`h1`-`h6`, `p`, etc.).
-
----
-
-# Part 1: Frontend Implementation (Visuals & Static UI)
-
-## Phase 1.1: Foundations & Navigation
-- [x] **Navigation**: Update pending links in `Header` and implement `Footer` component.
-- [x] **Wallet UI**: Add `WalletMultiButton` to Header and stylize to match Brand Kit (visual only placement).
-- [x] **Layout**: Ensure global layout matches the design system (font smoothing, background colors).
-
-## Phase 1.2: Core Pages & UI
-- [x] **Landing Page (`/`)**: Replace placeholder with real landing page sections (Hero, Features, Stats) using `lucide-react` icons.
-- [x] **Course Catalog (`/courses`)**: Update `MOCK_DATA` with realistic Solana curriculum. Implement filtering/search UI (local state only).
-- [x] **Dashboard (`/dashboard`)**: Create user dashboard layout. Display enrolled courses, XP balance, and streak calendar using static mock data.
-- [x] **Course Detail (`/courses/[slug]`)**: Build course header, module list, and enrollment CTA UI.
-
-## Phase 1.3: Learning Experience (The "Engine")
-- [x] **Lesson Layout**: Implement `ResizablePanel` for split view (Content vs Editor) in `/courses/[slug]/lessons/[id]`.
-- [x] **Content Rendering**: Integrate `react-markdown` with `remark-gfm` for lesson content display.
-- [x] **Code Editor UI**: Create `CodeEditor` component (Visual wrapper for iframe or editor) with "Run" and "Reset" buttons.
-- [x] **Completion UI**: Create the success state modal with confetti animation and XP reward display.
-
-## Phase 1.4: Gamification & User Profile
-- [x] **Profile Page (`/profile`)**: Build profile UI with skill radar (`recharts`), badges grid, and "Certificates" section.
-- [x] **Leaderboard UI**: Implement leaderboard table with ranking, avatar, and XP columns using mock data.
-- [x] **Certificates (`/certificates/[id]`)**: Create shareable certificate view/card component.
-
-## Phase 1.5: Polish (Frontend)
-- [x] **SEO & Metadata**: Configure `generateMetadata` for all pages.
-- [x] **Performance**: Optimize images (`next/image`) and font loading.
-- [x] **Responsive Check**: Verify mobile layouts for all screens.
+## Current Progress Status
+- [x] **Brand Identity**: Typography, colors, and design system foundations.
+- [x] **Core UI Pages**: Landing, Catalog, Detail, Dashboard, Profile, and Leaderboard (Static/Mock).
+- [x] **Learning Engine (Visual)**: Split lesson layout and initial code editor iframe integration.
 
 ---
 
-# Part 2: Backend Wiring & Integration (Logic & State)
+## Phase 1: Dynamic UI & Identity Foundations
+*Objective: Solidify the user identity and settings framework before wiring backend logic.*
 
-## Phase 2.1: Auth & State Setup
-- [ ] **Global Wallet Authentication**: Integrate `jupiter Wallet` in `layout.tsx` (ConnectionProvider, WalletProvider, WalletModalProvider).
-- [ ] **State Management**: Set up Zustand store for user session (`useUserStore`) and learning progress (`useProgressStore`).
-- [ ] **API Client**: Create a service layer (`src/lib/services/api.ts`) to interact with the backend (or mock service for MVP).
+- [ ] **[NEW] Settings Page (`/settings`)**
+    - [ ] Profile Editing: UI for name, bio, avatar upload.
+    - [ ] Account Management: Wallet linking and OAuth stubs.
+    - [ ] Preferences: Language and Theme selectors.
+- [ ] **Internationalization (i18n)**
+    - [ ] Implement `next-intl` or `next-i18next`.
+    - [ ] Move all UI strings to locale files (EN, PT-BR, ES).
+- [ ] **Global State**
+    - [ ] Set up Zustand store for user session and locale-persistent settings.
 
-## Phase 2.2: Data Wiring
-- [ ] **Course Data**: Implement dynamic fetching for course details in `/courses/[slug]` using the service layer.
-- [ ] **Enrollment Logic**: Connect Enrollment CTA to `LearningProgressService` (stub or wallet signature).
-- [ ] **Dashboard Data**: Connect Dashboard components to `useUserStore` and `useProgressStore` for real/stubbed values.
+## Phase 2: Authentication & Backend Bridge
+*Objective: Enable secure user sessions and provide a unified interface for data fetching.*
 
-## Phase 2.3: Learning Engine Logic
-- [ ] **Lesson Data**: Fetch specific lesson content and code challenge templates via service layer.
-- [ ] **Editor Integration**: Implement `postMessage` communication with Solana Playground iframe or execute code logic.
-- [ ] **Completion Logic**: Wire "Complete Lesson" button to `completeLesson` service method and update global XP state.
+- [ ] **Wallet Authentication**
+    - [ ] Finalize Jupiter Wallet Adapter integration.
+    - [ ] Implement backend signature verification (Solana Message Signing).
+- [ ] **Service Layer Implementation**
+    - [ ] Develop `LearningProgressService` interface.
+    - [ ] Create `StubLearningProgressService` for local development.
+    - [ ] Integrate service with `/courses`, `/dashboard`, and `/profile`.
 
-## Phase 2.4: Gamification Logic
-- [ ] **Profile Data**: Fetch user profile, skills, and achievements from service.
-- [ ] **Leaderboard Data**: Connect leaderboard table to `getLeaderboard` service method (mock or indexed).
-- [ ] **On-Chain Check**: Stub credential verification or implement `GetProgramAccounts` check.
+## Phase 3: Content & Learning Engine (Dynamic)
+*Objective: Connect the LMS to real data sources and enable progress tracking.*
 
-## Phase 2.5: End-to-End Testing
-- [ ] **Testing**: Verify end-to-end flow: Landing -> Auth -> Enrollment -> Lesson Completion -> XP Update.
+- [ ] **Sanity CMS Integration**
+    - [ ] Connect frontend to Sanity Studio.
+    - [ ] Replace `MOCK_DATA` in catalog and detail pages with GROQ queries.
+- [ ] **Progress Tracking**
+    - [ ] Implement lesson completion logic (backend-signed transaction stubs).
+    - [ ] Update enrollment state tracking on-chain (Devnet).
 
----
+## Phase 4: Gamification & On-Chain Rewards
+*Objective: Finalize the XP and Credential systems.*
 
-## Detailed Task Breakdown
+- [ ] **On-Chain Identity**
+    - [ ] Fetch XP Balance from Token-2022 accounts.
+    - [ ] Fetch Metaplex Core NFTs for credentials and badges.
+- [ ] **Gamification Logic**
+    - [ ] Implement Streak system (Frontend tracking + backend persistence).
+    - [ ] Implement Leaderboard indexing (Derived from on-chain XP balances).
 
-### 1. Components to Build
-- `CourseCard.tsx` (Refine existing)
-- `LessonSidebar.tsx` (Navigation)
-- `XPBadge.tsx` (Gamification)
-- `WalletMultiButton.tsx` (Styled wrapper)
-- `Footer.tsx`
+## Phase 5: Production & Distribution
+*Objective: Performance optimization and final handoff.*
 
-### 2. Services to Implement (Part 2)
-```typescript
-// Define LearningProgressService interface in src/lib/services/types.ts
-```
+- [ ] **Analytics & Monitoring**
+    - [ ] Integrate GA4, PostHog, and Sentry.
+- [ ] **Documentation**
+    - [ ] Finalize `README.md`, `ARCHITECTURE.md`, and `CMS_GUIDE.md`.
+- [ ] **Final Polish**
+    - [ ] SEO Metadata, Page Transitions, and Lighthouse Audits.
