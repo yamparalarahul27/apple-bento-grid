@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Clock, BarChart, CheckCircle2 } from "lucide-react";
+import { Clock, BarChart } from "lucide-react";
 import { Module } from "@/components/courses/ModuleList";
 
 export interface Course {

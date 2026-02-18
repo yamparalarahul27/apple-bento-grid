@@ -71,7 +71,7 @@ export function ThemeController() {
                 </div>
                 <div className="mt-6 p-4 rounded-md bg-muted/50 border border-muted">
                     <p className="text-xs text-muted-foreground italic">
-                        Changes are applied instantly for preview. Click "Apply Globally" to persist across pages.
+                        Changes are applied instantly for preview. Click &quot;Apply Globally&quot; to persist across pages.
                     </p>
                 </div>
             </CardContent>

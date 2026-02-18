@@ -48,7 +48,7 @@ export function StreakCard() {
                 </div>
             </div>
             <p className="mt-4 text-caption text-text-secondary">
-                You're on fire! Complete a lesson today to keep your streak alive.
+                You&apos;re on fire! Complete a lesson today to keep your streak alive.
             </p>
         </div>
     );

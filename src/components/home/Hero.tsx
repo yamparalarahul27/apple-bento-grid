@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowRight, Code2, Rocket } from "lucide-react";
-import { WalletConnectButton } from "@/components/ui/WalletConnectButton";
 
 export function Hero() {
     return (

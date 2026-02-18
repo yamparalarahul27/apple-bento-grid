@@ -1,4 +1,5 @@
 import { CourseCard } from "@/components/courses/CourseCard";
+import Link from "next/link";
 
 // Mock enrolled courses (subset of main catalog with progress)
 const ENROLLED_COURSES = [
@@ -31,7 +32,7 @@ export function EnrolledCourses() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <h2 className="text-h3 font-bold text-text-primary">Continue Learning</h2>
-                <a href="/courses" className="text-body-2 font-bold text-primary hover:underline">View All Courses</a>
+                <Link href="/courses" className="text-body-2 font-bold text-primary hover:underline">View All Courses</Link>
             </div>
 
             {ENROLLED_COURSES.length > 0 ? (
@@ -42,7 +43,7 @@ export function EnrolledCourses() {
                 </div>
             ) : (
                 <div className="rounded-xl border border-dashed border-border p-8 text-center bg-surface/50">
-                    <p className="text-text-secondary">You haven't enrolled in any courses yet.</p>
+                    <p className="text-text-secondary">You haven&apos;t enrolled in any courses yet.</p>
                 </div>
             )}
         </div>

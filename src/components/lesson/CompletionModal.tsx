@@ -3,8 +3,7 @@
 import ReactConfetti from "react-confetti";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Trophy, ArrowRight, X } from "lucide-react";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Trophy, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useWindowSize } from "@/hooks/use-window-size"; // We might need this hook
 
@@ -35,7 +34,7 @@ export function CompletionModal({ isOpen, onClose, nextLessonUrl, xpEarned }: Co
                     <DialogHeader>
                         <DialogTitle className="text-display-2 font-bold text-center">Lesson Complete!</DialogTitle>
                         <DialogDescription className="text-center text-body-1">
-                            You've earned <span className="font-bold text-primary">+{xpEarned} XP</span> and are one step closer to mastering Solana.
+                            You&apos;ve earned <span className="font-bold text-primary">+{xpEarned} XP</span> and are one step closer to mastering Solana.
                         </DialogDescription>
                     </DialogHeader>
 

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card"; // Assuming Card component exists
 import { Download, ExternalLink, Award } from "lucide-react";
 import Link from "next/link";
 

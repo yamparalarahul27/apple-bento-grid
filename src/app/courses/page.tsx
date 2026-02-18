@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Course, CourseCard } from "@/components/courses/CourseCard";
-import { Search, Filter, BookOpen } from "lucide-react";
+import { Search, BookOpen } from "lucide-react";
 
 // MOCK DATA - To be replaced by Sanity CMS later
 const COURSES: Course[] = [
@@ -125,8 +125,8 @@ export default function CoursesPage() {
                             key={filter}
                             onClick={() => setActiveFilter(filter)}
                             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${activeFilter === filter
-                                    ? "bg-primary text-primary-foreground"
-                                    : "bg-surface border border-border text-text-secondary hover:bg-surface-2 hover:text-text-primary"
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-surface border border-border text-text-secondary hover:bg-surface-2 hover:text-text-primary"
                                 }`}
                         >
                             {filter}
@@ -151,7 +151,7 @@ export default function CoursesPage() {
                         No courses found
                     </h3>
                     <p className="text-body-1 text-text-secondary max-w-sm">
-                        Try adjusting your search or filters to find what you're looking
+                        Try adjusting your search or filters to find what you&apos;re looking
                         for.
                     </p>
                     <button

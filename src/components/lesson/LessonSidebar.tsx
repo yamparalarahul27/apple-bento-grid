@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle2, Lock, PlayCircle, Code2, ChevronLeft } from "lucide-react";
+import { CheckCircle2, PlayCircle, Code2, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";

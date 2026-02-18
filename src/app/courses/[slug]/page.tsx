@@ -7,19 +7,13 @@ import { notFound } from "next/navigation";
 // We need to define the type here locally or extend the one from CourseCard if we exported it properly
 // For now, let's redefine a robust mock structure.
 
-interface CourseDetail {
-    id: string;
-    title: string;
-    description: string;
-    thumbnail: string;
-    difficulty: "Beginner" | "Intermediate" | "Advanced";
-    duration: string;
-    modules: number; // count
-    slug: string;
+// Extended mock data to include modules (In real app, this comes from Sanity)
+// Redefine a robust mock structure.
+interface CourseWithModules extends Course {
     moduleContent: Module[];
 }
 
-const COURSE_CONTENT_MOCK: Record<string, Course> = { // Use Course type from CourseCard if possible, but let's just make it robust locally
+const COURSE_CONTENT_MOCK: Record<string, CourseWithModules> = {
     "solana-fundamentals": {
         id: "1",
         title: "Solana Fundamentals",
@@ -57,7 +51,7 @@ const COURSE_CONTENT_MOCK: Record<string, Course> = { // Use Course type from Co
                 ]
             }
         ]
-    } as any, // Cast as any to bypass strict type check on missing props from CourseCard if unrelated
+    },
     "rust-for-solana": {
         id: "2",
         title: "Rust for Solana",
@@ -68,7 +62,7 @@ const COURSE_CONTENT_MOCK: Record<string, Course> = { // Use Course type from Co
         modules: 0,
         slug: "rust-for-solana",
         moduleContent: []
-    } as any
+    }
 };
 
 import { Metadata } from "next";
@@ -130,7 +124,7 @@ export default async function CourseDetailPage({ params }: PageProps) {
                         </ul>
                     </div>
                     <div className="bg-surface-2/30 rounded-lg p-6 border border-border">
-                        <h4 className="text-h4 font-bold text-text-primary mb-2">What you'll learn</h4>
+                        <h4 className="text-h4 font-bold text-text-primary mb-2">What you&apos;ll learn</h4>
                         <ul className="list-disc list-inside text-body-2 text-text-secondary space-y-1">
                             <li>Solana Accounts Model</li>
                             <li>SPL Tokens</li>

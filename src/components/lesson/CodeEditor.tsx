@@ -1,14 +1,9 @@
 "use client";
 
-import { Terminal, Play, RotateCcw } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Terminal, RotateCcw } from "lucide-react";
 import { useState } from "react";
 
-interface CodeEditorProps {
-    initialCode?: string; // Not used for SolPG iframe but good for API shape
-}
-
-export function CodeEditor({ initialCode }: CodeEditorProps) {
+export function CodeEditor() {
     const [key, setKey] = useState(0); // Key to force re-render/reload of iframe
 
     const handleReset = () => {
