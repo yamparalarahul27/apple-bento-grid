@@ -6,15 +6,19 @@ type ThemeColors = {
     [key: string]: string;
 };
 
+type ThemeMode = 'light' | 'dark';
+
 const ThemeContext = createContext<{
     colors: ThemeColors;
+    mode: ThemeMode;
+    setMode: (mode: ThemeMode) => void;
     updateColor: (key: string, value: string) => void;
     applyTheme: () => void;
     resetTheme: () => void;
 } | null>(null);
 
-// Updated with Radix Dark Mode Defaults
-export const DEFAULT_COLORS: ThemeColors = {
+// Radix Dark Mode Defaults
+export const DARK_COLORS: ThemeColors = {
     "--gray-1": "#111113",   // Background
     "--gray-2": "#19191b",   // Surface/Card
     "--gray-3": "#222325",   // Secondary/Border
@@ -26,24 +30,29 @@ export const DEFAULT_COLORS: ThemeColors = {
     "--green-3": "#0c2e1a",  // Saturated Dark Green
 };
 
-// Helper to convert hex to HSL string for Shadcn variables
-function hexToHSLValues(hex: string): string {
-    let r = 0, g = 0, b = 0;
-    if (hex.length === 4) {
-        r = parseInt(hex[1] + hex[1], 16);
-        g = parseInt(hex[2] + hex[2], 16);
-        b = parseInt(hex[3] + hex[3], 16);
-    } else if (hex.length === 7) {
-        r = parseInt(hex.substring(1, 3), 16);
-        g = parseInt(hex.substring(3, 5), 16);
-        b = parseInt(hex.substring(5, 7), 16);
-    }
+// Radix Light Mode Defaults (Approximation for now)
+export const LIGHT_COLORS: ThemeColors = {
+    "--gray-1": "#ffffff",   // Background
+    "--gray-2": "#f9f9fb",   // Surface/Card
+    "--gray-3": "#e2e2e5",   // Secondary/Border
+    "--gray-6": "#d3d3d6",   // Strong Border
+    "--gray-11": "#64656a",  // Muted Text
+    "--gray-12": "#111113",  // Primary Text
+    "--green-9": "#009955",  // Brand Primary
+    "--green-10": "#00cf73", // Hover
+    "--green-3": "#e6f8ef",  // Light Green Tint
+};
+
+function hexToHSL(hex: string): string {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) return "0 0% 0%";
+    let r = parseInt(result[1], 16);
+    let g = parseInt(result[2], 16);
+    let b = parseInt(result[3], 16);
     r /= 255; g /= 255; b /= 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
     let h = 0, s, l = (max + min) / 2;
-    if (max === min) {
-        h = s = 0;
-    } else {
+    if (max !== min) {
         const d = max - min;
         s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
         switch (max) {
@@ -57,77 +66,85 @@ function hexToHSLValues(hex: string): string {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [colors, setColors] = useState<ThemeColors>(DEFAULT_COLORS);
+    const [mode, setModeState] = useState<ThemeMode>('dark');
+    const [colors, setColors] = useState<ThemeColors>(DARK_COLORS);
 
     useEffect(() => {
-        const savedTheme = localStorage.getItem("app-theme");
-        if (savedTheme) {
-            try {
-                const parsed = JSON.parse(savedTheme);
-                // Ensure legacy themes don't break new system
-                if (parsed["--green-1"]) {
-                    console.log("Legacy theme detected, resetting to defaults.");
-                    localStorage.removeItem("app-theme");
-                    setColors(DEFAULT_COLORS);
-                } else {
-                    setColors(parsed);
-                    applyToDom(parsed);
-                }
-            } catch (e) {
-                console.error("Failed to parse saved theme", e);
-            }
+        const savedMode = localStorage.getItem("app-mode") as ThemeMode;
+        if (savedMode === 'light') {
+            setModeState('light');
+            setColors(LIGHT_COLORS);
+            applyToDom({ ...LIGHT_COLORS }, 'light');
+        } else {
+            // Default to dark
+            setModeState('dark');
+            setColors(DARK_COLORS);
+            applyToDom({ ...DARK_COLORS }, 'dark');
         }
     }, []);
 
-    const applyToDom = (themeColors: ThemeColors) => {
+    const setMode = (newMode: ThemeMode) => {
+        setModeState(newMode);
+        const newColors = newMode === 'light' ? LIGHT_COLORS : DARK_COLORS;
+        setColors(newColors);
+        applyToDom(newColors, newMode);
+        localStorage.setItem("app-mode", newMode);
+    };
+
+    const applyToDom = (themeColors: ThemeColors, currentMode: ThemeMode) => {
         const root = document.documentElement;
+
+        // Handle standard "dark" class for tailwind
+        if (currentMode === 'dark') {
+            root.classList.add('dark');
+        } else {
+            root.classList.remove('dark');
+        }
+
+        // Apply dynamic CSS variables
         Object.entries(themeColors).forEach(([key, value]) => {
             root.style.setProperty(key, value);
-
-            // Map Radix to Semantic Variables (Shadcn)
-            if (key === "--green-9") {
-                const hsl = hexToHSLValues(value);
-                root.style.setProperty("--primary", hsl);
-                root.style.setProperty("--ring", hsl);
-            }
-            if (key === "--gray-1") {
-                const hsl = hexToHSLValues(value);
-                root.style.setProperty("--background", hsl);
-                root.style.setProperty("--card", hsl); // Usually card matches background in some designs, or gray-2
-            }
-            if (key === "--gray-2") {
-                const hsl = hexToHSLValues(value);
-                // If cards should be gray-2
-                root.style.setProperty("--card", hsl);
-                root.style.setProperty("--popover", hsl);
-            }
-            if (key === "--gray-12") {
-                const hsl = hexToHSLValues(value);
-                root.style.setProperty("--foreground", hsl);
-                root.style.setProperty("--card-foreground", hsl);
-                root.style.setProperty("--popover-foreground", hsl);
-            }
         });
+
+        // Map to standard Shadcn/Tailwind vars
+        // We calculate HSL on the fly to support dynamic changes
+        root.style.setProperty("--background", hexToHSL(themeColors["--gray-1"]));
+        root.style.setProperty("--foreground", hexToHSL(themeColors["--gray-12"]));
+        root.style.setProperty("--card", hexToHSL(themeColors["--gray-2"]));
+        root.style.setProperty("--card-foreground", hexToHSL(themeColors["--gray-12"]));
+        root.style.setProperty("--popover", hexToHSL(themeColors["--gray-2"]));
+        root.style.setProperty("--popover-foreground", hexToHSL(themeColors["--gray-12"]));
+        root.style.setProperty("--primary", hexToHSL(themeColors["--green-9"]));
+        root.style.setProperty("--primary-foreground", "0 0% 100%"); // Always white for better contrast on green
+        root.style.setProperty("--secondary", hexToHSL(themeColors["--gray-3"]));
+        root.style.setProperty("--secondary-foreground", hexToHSL(themeColors["--gray-12"]));
+        root.style.setProperty("--muted", hexToHSL(themeColors["--gray-3"]));
+        root.style.setProperty("--muted-foreground", hexToHSL(themeColors["--gray-11"]));
+        root.style.setProperty("--accent", hexToHSL(themeColors["--gray-3"]));
+        root.style.setProperty("--accent-foreground", hexToHSL(themeColors["--gray-12"]));
+        root.style.setProperty("--destructive", "0 62.8% 30.6%");
+        root.style.setProperty("--destructive-foreground", "0 0% 98%");
+        root.style.setProperty("--border", hexToHSL(themeColors["--gray-6"]));
+        root.style.setProperty("--input", hexToHSL(themeColors["--gray-6"]));
+        root.style.setProperty("--ring", hexToHSL(themeColors["--green-9"]));
     };
 
     const updateColor = (key: string, value: string) => {
         const newColors = { ...colors, [key]: value };
         setColors(newColors);
-        applyToDom(newColors);
+        applyToDom(newColors, mode);
     };
 
     const applyTheme = () => {
-        localStorage.setItem("app-theme", JSON.stringify(colors));
+        // Legacy support if needed, or trigger specific checks
     };
 
     const resetTheme = () => {
-        setColors(DEFAULT_COLORS);
-        applyToDom(DEFAULT_COLORS);
-        localStorage.removeItem("app-theme");
+        setMode('dark');
     };
 
     return (
-        <ThemeContext.Provider value={{ colors, updateColor, applyTheme, resetTheme }}>
+        <ThemeContext.Provider value={{ colors, mode, setMode, updateColor, applyTheme, resetTheme }}>
             {children}
         </ThemeContext.Provider>
     );

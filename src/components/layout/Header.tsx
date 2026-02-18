@@ -1,11 +1,25 @@
 "use client";
 
-import { Menu, X } from "lucide-react";
+import { Menu, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { WalletConnectButton } from "@/components/ui/WalletConnectButton";
+import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "./ThemeToggle";
+
+import {
+    NavigationMenu,
+    NavigationMenuContent,
+    NavigationMenuItem,
+    NavigationMenuLink,
+    NavigationMenuList,
+    NavigationMenuTrigger,
+    navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 const NAV_ITEMS = [
     { label: "Courses", href: "/courses" },
@@ -13,6 +27,55 @@ const NAV_ITEMS = [
     { label: "Dashboard", href: "/dashboard" },
     { label: "Leaderboard", href: "/leaderboard" },
 ];
+
+const COURSES = [
+    {
+        title: "Solana Fundamentals",
+        href: "/courses/solana-fundamentals",
+        description: "Master the basics of blockchain and Solana's architecture.",
+    },
+    {
+        title: "Rust for Solana",
+        href: "/courses/rust-for-solana",
+        description: "Learn Rust programming specifically for smart contracts.",
+    },
+    {
+        title: "Anchor Framework",
+        href: "/courses/anchor-framework",
+        description: "Build secure and efficient programs using Anchor.",
+    },
+    {
+        title: "Security & Auditing",
+        href: "/courses/security-auditing",
+        description: "Best practices for writing secure Solana programs.",
+    },
+];
+
+const ListItem = React.forwardRef<
+    React.ElementRef<"a">,
+    React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+    return (
+        <li>
+            <NavigationMenuLink asChild>
+                <a
+                    ref={ref}
+                    className={cn(
+                        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                        className
+                    )}
+                    {...props}
+                >
+                    <div className="text-sm font-medium leading-none text-text-primary">{title}</div>
+                    <p className="line-clamp-2 text-sm leading-snug text-text-secondary">
+                        {children}
+                    </p>
+                </a>
+            </NavigationMenuLink>
+        </li>
+    )
+})
+ListItem.displayName = "ListItem"
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,9 +96,45 @@ export function Header() {
                     />
                 </Link>
 
+                {/* Search Bar */}
+                <div className="hidden flex-1 max-w-md px-8 md:block">
+                    <div className="relative">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            type="search"
+                            placeholder="Search courses..."
+                            className="w-full bg-surface-2 pl-9 focus-visible:ring-primary"
+                        />
+                    </div>
+                </div>
+
                 {/* Desktop Nav */}
-                <nav className="hidden items-center gap-8 md:flex">
-                    {NAV_ITEMS.map((item) => {
+                <nav className="hidden items-center gap-6 md:flex">
+                    <NavigationMenu>
+                        <NavigationMenuList>
+                            <NavigationMenuItem>
+                                <NavigationMenuTrigger className="bg-transparent text-body-1 font-bold hover:text-primary hover:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent px-0">
+                                    Courses
+                                </NavigationMenuTrigger>
+                                <NavigationMenuContent>
+                                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-surface border-border">
+                                        {COURSES.map((course) => (
+                                            <ListItem
+                                                key={course.title}
+                                                title={course.title}
+                                                href={course.href}
+                                                className="hover:bg-surface-2"
+                                            >
+                                                {course.description}
+                                            </ListItem>
+                                        ))}
+                                    </ul>
+                                </NavigationMenuContent>
+                            </NavigationMenuItem>
+                        </NavigationMenuList>
+                    </NavigationMenu>
+
+                    {NAV_ITEMS.filter(item => item.label !== "Courses").map((item) => {
                         const isActive = pathname === item.href;
                         return (
                             <Link
@@ -52,6 +151,7 @@ export function Header() {
 
                 {/* Desktop Actions */}
                 <div className="hidden items-center gap-4 md:flex">
+                    <ThemeToggle />
                     <WalletConnectButton onClick={() => { }} />
                 </div>
 
