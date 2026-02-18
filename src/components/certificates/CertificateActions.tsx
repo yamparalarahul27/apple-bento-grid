@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Twitter, Linkedin, Download, Link, Share2 } from "lucide-react";
+import { Twitter, Linkedin, Download, Link } from "lucide-react";
 
 export function CertificateActions() {
     const handleShare = (platform: string) => {

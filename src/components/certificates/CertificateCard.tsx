@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { CheckCircle2, ShieldCheck, Search } from "lucide-react";
 import { useState } from "react";
 import { CertificateVerificationSheet } from "./CertificateVerificationSheet";

@@ -128,7 +128,7 @@ export default function CertificatePage() {
                         <div className="bg-surface border border-border rounded-xl p-6 space-y-4">
                             <h4 className="font-bold text-text-primary">Validator Note</h4>
                             <p className="text-sm text-text-secondary italic">
-                                "This certificate confirms that the holder has demonstrated exceptional understanding of Solana's core principles and passed all practical evaluations with a score of 90% or higher."
+                                &quot;This certificate confirms that the holder has demonstrated exceptional understanding of Solana&apos;s core principles and passed all practical evaluations with a score of 90% or higher.&quot;
                             </p>
                             <div className="flex items-center gap-3 pt-4 border-t border-border">
                                 <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">

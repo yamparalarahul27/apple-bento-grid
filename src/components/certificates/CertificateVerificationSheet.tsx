@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Copy, Check, Twitter, Share2 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface CertificateVerificationSheetProps {
     isOpen: boolean;
@@ -26,7 +26,13 @@ export function CertificateVerificationSheet({
 }: CertificateVerificationSheetProps) {
     const [copied, setCopied] = useState(false);
     const explorerUrl = `https://explorer.solana.com/address/${mintAddress}?cluster=devnet`;
-    const shareUrl = `${window.location.origin}/certificates/${mintAddress}`;
+    const [shareUrl, setShareUrl] = useState("");
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            setShareUrl(`${window.location.origin}/certificates/${mintAddress}`);
+        }
+    }, [mintAddress]);
 
     const handleCopy = () => {
         navigator.clipboard.writeText(shareUrl);

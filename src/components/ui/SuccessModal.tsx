@@ -55,7 +55,7 @@ export function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
                         Wallet Connected!
                     </DialogTitle>
                     <DialogDescription className="text-text-secondary text-center text-base">
-                        Your wallet has been successfully linked to Superteam Brazil Academy. You're ready to start your journey.
+                        Your wallet has been successfully linked to Superteam Brazil Academy. You&apos;re ready to start your journey.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="mt-8 w-full">

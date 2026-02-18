@@ -1,10 +1,8 @@
 import { ProfileHeader } from "@/components/profile/ProfileHeader";
 import { SkillRadar } from "@/components/profile/SkillRadar";
 import { BadgesGrid } from "@/components/profile/BadgesGrid";
-import { CertificatesList } from "@/components/profile/CertificatesList";
 import { CertificateThumb } from "@/components/certificates/CertificateThumb";
 import { CheckCircle2 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 
 // Mock Data
