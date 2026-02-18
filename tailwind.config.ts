@@ -117,8 +117,8 @@ const config: Config = {
 					brand: 'hsl(var(--primary))',
 				},
 				// Brand Specific Aliases (from Brand Kit)
-				'brand-yellow': '#ffd23f',
-				'brand-cream': '#f7eacb',
+				// 'brand-yellow': '#ffd23f',
+				// 'brand-cream': '#f7eacb',
 				'brand-green': '#2f6b3f',
 				'brand-green-light': '#008c4c',
 				'brand-green-dark': '#1b231d',
