@@ -2,116 +2,218 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  /* Dark Theme (Default) */
-  /* Brand Colors */
-  --background: #101010;
-  /* Dark BG */
-  --surface: #1A1A1A;
-  /* Card BG */
-  --surface-2: #222222;
-  /* Hover/Secondary BG */
-  --border: #2A2A2A;
-  /* Border Color */
-  --border-highlight: #3A3A3A;
+@layer base {
 
-  --green-1: #14F195;
-  /* Primary Brand Green */
-  --green-1-hover: #0EBD74;
-  --green-2: #9945FF;
-  /* Secondary Brand Purple */
+  /* Light Theme */
+  :root, .light, .light-theme {
+    /* RADIX Colors: Green & Gray */
+    --green-1: #fbfefc;
+    --green-2: #f4fbf6;
+    --green-3: #e6f7ea;
+    --green-4: #d6f1dd;
+    --green-5: #c3e9ce;
+    --green-6: #addebb;
+    --green-7: #8ecfa2;
+    --green-8: #5eb97f;
+    --green-9: #008c4c;
+    --green-10: #007e3f;
+    --green-11: #008243;
+    --green-12: #1c3b27;
 
-  --text-primary: #FFFFFF;
-  --text-secondary: #A0A0A0;
-  --text-inverse: #000000;
+    --green-a1: #00c04004;
+    --green-a2: #00a32f0b;
+    --green-a3: #00ae2919;
+    --green-a4: #00a82c29;
+    --green-a5: #00a22f3c;
+    --green-a6: #00992c52;
+    --green-a7: #00932e71;
+    --green-a8: #009035a1;
+    --green-a9: #008c4c;
+    --green-a10: #007e3f;
+    --green-a11: #008243;
+    --green-a12: #00230ce3;
 
-  /* Shadcn Mappings to Brand Colors */
-  --foreground: 0 0% 100%;
-  /* White */
+    --green-contrast: #fff;
+    --green-surface: #f1faf4cc;
+    --green-indicator: #008c4c;
+    --green-track: #008c4c;
 
-  --card: 0 0% 10%;
-  /* #1A1A1A (HSL approx) */
-  --card-foreground: 0 0% 100%;
+    --gray-1: #fdfdfd;
+    --gray-2: #f9f9f9;
+    --gray-3: #f0f0f0;
+    --gray-4: #e8e8e8;
+    --gray-5: #e1e1e1;
+    --gray-6: #d9d9d9;
+    --gray-7: #cecece;
+    --gray-8: #bbb;
+    --gray-9: #8c8c8c;
+    --gray-10: #828282;
+    --gray-11: #636363;
+    --gray-12: #1f1f1f;
 
-  --popover: 0 0% 10%;
-  /* #1A1A1A */
-  --popover-foreground: 0 0% 100%;
+    --gray-a1: #00000002;
+    --gray-a2: #00000006;
+    --gray-a3: #0000000f;
+    --gray-a4: #00000017;
+    --gray-a5: #0000001e;
+    --gray-a6: #00000026;
+    --gray-a7: #00000031;
+    --gray-a8: #00000044;
+    --gray-a9: #00000073;
+    --gray-a10: #0000007d;
+    --gray-a11: #0000009c;
+    --gray-a12: #000000e0;
 
-  --primary: 155 89% 51%;
-  /* #14F195 (HSL approx) */
-  --primary-foreground: 0 0% 0%;
+    --gray-contrast: #FFFFFF;
+    --gray-surface: #ffffffcc;
+    --gray-indicator: #8c8c8c;
+    --gray-track: #8c8c8c;
 
-  --secondary: 0 0% 13%;
-  /* #222222 */
-  --secondary-foreground: 0 0% 100%;
+    /* Semantic Mappings (Shadcn/UI) */
+    --background: 0 0% 100%; /* White */
+    --foreground: 0 0% 3.9%; /* Gray-12 approx (HSL) */
 
-  --muted: 0 0% 16%;
-  /* #2A2A2A */
-  --muted-foreground: 0 0% 63%;
-  /* #A0A0A0 */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+ 
+    --primary: 142 100% 27.5%; /* Green-9 (#008c4c) HSL: 142, 100, 27.5 approx? No, let's map directly */
+    /* Wait, Shadcn uses HSL values (without hsl() wrapper). 
+       #008c4c -> HSL(153, 100%, 27.5%) approx? No.
+       R=0, G=140, B=76 -> H=153deg, S=100%, L=27.5%
+       Actually, let me use exact HSL for #008c4c: 153 100% 27%
+    */
+    --primary: 153 100% 27%;
+    --primary-foreground: 0 0% 98%; /* Green Contrast (White) */
+ 
+    --secondary: 0 0% 96.1%; /* Gray-3 (#f0f0f0 -> HSL 0 0 94) */
+    --secondary-foreground: 0 0% 9%;
+ 
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+ 
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
 
-  --accent: 0 0% 13%;
-  /* #222222 */
-  --accent-foreground: 0 0% 100%;
+    --border: 0 0% 89.8%; /* Gray-6 (#d9d9d9 -> HSL 0 0 85) */
+    --input: 0 0% 89.8%;
+    --ring: 153 100% 27%;
+ 
+    --radius: 0.5rem;
 
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
+    /* Custom Brand Variables (CSS Var Reference) */
+    --brand-green-light: #008c4c;
+    --brand-green-dark: #1b231d;
+    --brand-yellow: #ffd23f;
+    --brand-cream: #f7eacb;
+  }
+ 
+  /* Dark Theme */
+  .dark, .dark-theme {
+    /* RADIX Colors: Green & Gray */
+    --green-1: #0a140d;
+    --green-2: #101c14;
+    --green-3: #0c2e1a;
+    --green-4: #003e1d;
+    --green-5: #004c25;
+    --green-6: #005b2e;
+    --green-7: #006d38;
+    --green-8: #008142;
+    --green-9: #008c4c;
+    --green-10: #007e3f;
+    --green-11: #64d18d;
+    --green-12: #9ef8bb;
 
-  --input: 0 0% 16%;
-  /* #2A2A2A */
-  --ring: 155 89% 51%;
-  /* #14F195 */
+    --green-a1: #00d10004;
+    --green-a2: #00fb510c;
+    --green-a3: #00f95920;
+    --green-a4: #00fc5031;
+    --green-a5: #00fd6140;
+    --green-a6: #00fd6d50;
+    --green-a7: #00fe7663;
+    --green-a8: #00ff7a78;
+    --green-a9: #00ff8384;
+    --green-a10: #00ff7675;
+    --green-a11: #78ffabce;
+    --green-a12: #a2ffc0f8;
 
-  --radius: 0.5rem;
+    --green-contrast: #fff;
+    --green-surface: #10271780;
+    --green-indicator: #008c4c;
+    --green-track: #008c4c;
 
-  --border-yellow: #FFCB20;
+    --gray-1: #111113;
+    --gray-2: #19191b;
+    --gray-3: #222325;
+    --gray-4: #292a2e;
+    --gray-5: #303136;
+    --gray-6: #393a40;
+    --gray-7: #46484f;
+    --gray-8: #5f606a;
+    --gray-9: #6c6e79;
+    --gray-10: #797b86;
+    --gray-11: #b2b3bd;
+    --gray-12: #eeeef0;
 
-  --green-1-hover: #275935;
-  --green-1-pressed: #1F482A;
-  --green-1-border: #5F8C6A;
+    --gray-a1: #1111bb03;
+    --gray-a2: #cbcbf90b;
+    --gray-a3: #d6e2f916;
+    --gray-a4: #d1d9f920;
+    --gray-a5: #d7ddfd28;
+    --gray-a6: #d9defc33;
+    --gray-a7: #dae2fd43;
+    --gray-a8: #e0e3fd60;
+    --gray-a9: #e0e4fd70;
+    --gray-a10: #e3e7fd7e;
+    --gray-a11: #eff0feb9;
+    --gray-a12: #fdfdffef;
 
-  --green-2-pressed: #005930;
-  --green-2-border: #2FAE79;
+    --gray-contrast: #FFFFFF;
+    --gray-surface: rgba(0, 0, 0, 0.05);
+    --gray-indicator: #6c6e79;
+    --gray-track: #6c6e79;
 
-  --bg-green-surface: #28342B;
-  --bg-green-border: #36463A;
+    /* Semantic Mappings (Shadcn/UI) */
+    --background: 240 6% 7%; /* Gray-1 (#111113) -> HSL 240 6% 7% */
+    --foreground: 0 0% 98%;
 
-  /* Text */
-  --text-primary: #1B231D;
-  --text-inverse: #F7EACB;
-
-  color-scheme: light;
+    --card: 240 6% 7%;
+    --card-foreground: 0 0% 98%;
+ 
+    --popover: 240 6% 7%;
+    --popover-foreground: 0 0% 98%;
+ 
+    --primary: 153 100% 27%; /* Green-9 (#008c4c) */
+    --primary-foreground: 0 0% 98%;
+ 
+    --secondary: 240 4% 16%; /* Gray-3 ish */
+    --secondary-foreground: 0 0% 98%;
+ 
+    --muted: 240 4% 16%;
+    --muted-foreground: 240 5% 64.9%;
+ 
+    --accent: 240 4% 16%;
+    --accent-foreground: 0 0% 98%;
+ 
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+ 
+    --border: 240 4% 16%; /* Gray-6 (#393a40 -> HSL 231 6 24) */
+    --input: 240 4% 16%;
+    --ring: 153 100% 27%;
+  }
 }
-
-.dark {
-  --background: #1B231D;
-  --surface: #28342B;
-  --surface-2: #36463A;
-  --border: #36463A;
-
-  /* Inverted semantic meanings for dark mode */
-  --text-primary: #F7EACB;
-  --text-inverse: #1B231D;
-
-  /* Adjust surface/border colors for readability in dark mode if needed, 
-     but keeping to the provided 'bg_green' tokens for now */
-
-  color-scheme: dark;
-}
-
-body {
-  background-color: var(--background);
-  color: var(--text-primary);
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "rlig" 1, "calt" 1;
-}
-
-/* Typography Overrides */
-h1,
-h2 {
-  text-wrap: balance;
-}
-
-p {
-  text-wrap: pretty;
+ 
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }

@@ -72,7 +72,7 @@ export default function CourseDetailPage() {
                 <div className="lg:col-span-4 space-y-8">
                     <div>
                         <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-                            <BookOpen className="w-5 h-5 text-green-1" /> What you'll learn
+                            <BookOpen className="w-5 h-5 text-primary" /> What you'll learn
                         </h3>
                         <ul className="space-y-3">
                             {[
@@ -82,7 +82,7 @@ export default function CourseDetailPage() {
                                 "Deploy and test on Devnet"
                             ].map((item, i) => (
                                 <li key={i} className="flex gap-3 text-sm text-text-secondary items-start">
-                                    <CheckCircle2 className="w-4 h-4 text-green-1 flex-shrink-0 mt-0.5" />
+                                    <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                                     {item}
                                 </li>
                             ))}
@@ -95,7 +95,7 @@ export default function CourseDetailPage() {
                     <div className="p-6 rounded-xl border border-border bg-surface">
                         <h4 className="font-bold mb-4 text-sm uppercase tracking-wider text-text-secondary">Instructor</h4>
                         <div className="flex items-center gap-4">
-                            <div className="h-12 w-12 rounded-full bg-green-2" />
+                            <div className="h-12 w-12 rounded-full bg-primary/20" />
                             <div>
                                 <div className="font-bold text-text-primary">Superteam DAO</div>
                                 <div className="text-xs text-text-secondary">Solana Ecosystem</div>
@@ -113,7 +113,7 @@ export default function CourseDetailPage() {
                             <AccordionItem
                                 key={module.id}
                                 value={module.id}
-                                className="border border-border rounded-xl bg-surface px-6 data-[state=open]:border-green-1/50 overflow-hidden"
+                                className="border border-border rounded-xl bg-surface px-6 data-[state=open]:border-primary/50 overflow-hidden"
                             >
                                 <AccordionTrigger className="hover:no-underline py-4">
                                     <div className="flex flex-col text-left">

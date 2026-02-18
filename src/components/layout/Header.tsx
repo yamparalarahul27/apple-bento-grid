@@ -40,7 +40,7 @@ export function Header() {
                             <Link
                                 key={item.href}
                                 href={item.href}
-                                className={`text-lg font-bold transition-colors hover:text-green-1 ${isActive ? "text-green-1" : "text-text-primary"
+                                className={`text-lg font-bold transition-colors hover:text-primary ${isActive ? "text-primary" : "text-text-primary"
                                     }`}
                             >
                                 {item.label}
@@ -51,7 +51,7 @@ export function Header() {
 
                 {/* Desktop Actions */}
                 <div className="hidden items-center gap-4 md:flex">
-                    <button className="flex items-center gap-2 rounded-lg bg-green-1 px-3 py-2 text-md font-bold text-text-inverse transition-colors hover:bg-green-1-hover">
+                    <button className="flex items-center gap-2 rounded-lg bg-primary px-3 py-2 text-md font-bold text-primary-foreground transition-colors hover:bg-green-10">
                         Select Wallet
                     </button>
                 </div>
@@ -83,7 +83,7 @@ export function Header() {
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`border-b border-border py-4 text-lg font-bold transition-colors hover:text-green-1 ${isActive ? "text-green-1" : "text-text-primary"
+                                    className={`border-b border-border py-4 text-lg font-bold transition-colors hover:text-primary ${isActive ? "text-primary" : "text-text-primary"
                                         }`}
                                     onClick={() => setIsMenuOpen(false)}
                                 >
@@ -92,7 +92,7 @@ export function Header() {
                             );
                         })}
                         <div className="pt-8">
-                            <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-green-1 px-4 py-2 text-lg font-bold text-text-inverse transition-colors hover:bg-green-1-hover">
+                            <button className="flex w-full items-center justify-center gap-2 rounded-lg bg-primary px-4 py-2 text-lg font-bold text-primary-foreground transition-colors hover:bg-green-10">
                                 Select Wallet
                             </button>
                         </div>

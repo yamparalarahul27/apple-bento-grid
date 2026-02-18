@@ -24,7 +24,7 @@ export default function CoursesPage() {
                                 (filter) => (
                                     <button
                                         key={filter}
-                                        className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:border-green-1 hover:text-green-1"
+                                        className="rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-text-primary transition-colors hover:border-primary hover:text-primary"
                                     >
                                         {filter}
                                     </button>
@@ -39,9 +39,9 @@ export default function CoursesPage() {
                                 <input
                                     type="text"
                                     placeholder="Ask our Solana AI Tutor..."
-                                    className="h-12 w-full rounded-lg border border-border bg-surface pl-12 pr-12 text-text-primary placeholder:text-text-secondary focus:border-green-1 focus:outline-none focus:ring-1 focus:ring-green-1"
+                                    className="h-12 w-full rounded-lg border border-border bg-surface pl-12 pr-12 text-text-primary placeholder:text-text-secondary focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
                                 />
-                                <button className="absolute right-2 top-1/2 -translate-y-1/2 list-none rounded-md bg-green-1 p-2 text-text-inverse transition-colors hover:bg-green-1-hover">
+                                <button className="absolute right-2 top-1/2 -translate-y-1/2 list-none rounded-md bg-primary p-2 text-primary-foreground transition-colors hover:bg-green-10">
                                     <ChevronRight className="h-4 w-4" />
                                 </button>
                             </div>
@@ -50,7 +50,7 @@ export default function CoursesPage() {
                         {/* Quiz CTA */}
                         <div className="flex items-center gap-2 text-sm text-text-secondary">
                             <span>Not sure where to start?</span>
-                            <a href="#" className="font-bold text-green-1 hover:underline">
+                            <a href="#" className="font-bold text-primary hover:underline">
                                 Take the Solana path quiz →
                             </a>
                         </div>
@@ -70,7 +70,7 @@ export default function CoursesPage() {
                                     <button
                                         key={track.id}
                                         className={`flex items-center justify-between rounded-lg px-4 py-3 text-sm font-medium transition-colors text-left ${track.active
-                                            ? "bg-surface-2 text-green-1"
+                                            ? "bg-surface-2 text-primary"
                                             : "text-text-secondary hover:bg-surface hover:text-text-primary"
                                             }`}
                                     >
@@ -103,7 +103,7 @@ export default function CoursesPage() {
                                     {MOCK_TRENDING_COURSES.map((course) => (
                                         <div
                                             key={course.id}
-                                            className="group relative overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all hover:border-green-1"
+                                            className="group relative overflow-hidden rounded-lg border border-border bg-surface p-6 transition-all hover:border-primary"
                                         >
                                             <div className="mb-4 flex items-start justify-between">
                                                 <div className={`h-12 w-12 rounded-lg ${course.accent} opacity-80`} /> {/* Placeholder for icon/logo */}
@@ -114,7 +114,7 @@ export default function CoursesPage() {
                                             <p className="mb-6 text-sm text-text-secondary">
                                                 {course.description}
                                             </p>
-                                            <button className="text-sm font-bold text-green-1 group-hover:underline">
+                                            <button className="text-sm font-bold text-primary group-hover:underline">
                                                 Explore track →
                                             </button>
                                         </div>
@@ -142,10 +142,10 @@ export default function CoursesPage() {
                                     {MOCK_BOOTCAMPS.map((bootcamp) => (
                                         <div
                                             key={bootcamp.id}
-                                            className="flex flex-col rounded-lg border border-border bg-surface p-6 transition-all hover:border-green-1"
+                                            className="flex flex-col rounded-lg border border-border bg-surface p-6 transition-all hover:border-primary"
                                         >
                                             <div className="mb-4">
-                                                <span className="inline-block rounded-full bg-green-1/10 px-3 py-1 text-xs font-bold text-green-1">
+                                                <span className="inline-block rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary">
                                                     Starts in {bootcamp.startsIn}
                                                 </span>
                                             </div>

@@ -68,7 +68,7 @@ export default function LessonPage() {
                     <Button variant="outline" size="sm" className="hidden md:flex bg-surface hover:bg-surface-2 text-text-primary border-border">
                         Next <ChevronRight className="w-4 h-4 ml-1" />
                     </Button>
-                    <Button size="sm" className="bg-green-1 text-text-inverse hover:bg-green-1-hover font-bold">
+                    <Button size="sm" className="bg-primary text-primary-foreground hover:bg-green-10 font-bold">
                         <CheckCircle className="w-4 h-4 mr-2" /> Mark Complete
                     </Button>
                 </div>
@@ -81,7 +81,7 @@ export default function LessonPage() {
                     {/* LEFT PANEL: LESSON CONTENT */}
                     <ResizablePanel defaultSize={40} minSize={20} className="bg-background">
                         <div className="h-full w-full overflow-y-auto p-8 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
-                            <article className="prose prose-invert prose-green max-w-none prose-headings:text-text-primary prose-p:text-text-secondary prose-strong:text-text-primary prose-code:text-green-1">
+                            <article className="prose prose-invert prose-green max-w-none prose-headings:text-text-primary prose-p:text-text-secondary prose-strong:text-text-primary prose-code:text-primary">
                                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                     {lesson.content || "No content available for this lesson."}
                                 </ReactMarkdown>
@@ -89,7 +89,7 @@ export default function LessonPage() {
                         </div>
                     </ResizablePanel>
 
-                    <ResizableHandle withHandle className="bg-border hover:bg-green-1 transition-colors w-1.5" />
+                    <ResizableHandle withHandle className="bg-border hover:bg-primary transition-colors w-1.5" />
 
                     {/* RIGHT PANEL: EDITOR / IFRAME */}
                     <ResizablePanel defaultSize={60} minSize={30} className="bg-[#1e1e1e]">

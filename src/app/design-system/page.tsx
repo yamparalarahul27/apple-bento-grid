@@ -43,9 +43,11 @@ export default function DesignSystemPage() {
                     <ColorSwatch name="Surface" variable="bg-surface" />
                     <ColorSwatch name="Surface-2" variable="bg-surface-2" />
                     <ColorSwatch name="Border" variable="bg-border" />
-                    <ColorSwatch name="Green-1 (Primary)" variable="bg-green-1" />
-                    <ColorSwatch name="Green-1 Hover" variable="bg-green-1-hover" />
-                    <ColorSwatch name="Green-2 (Purple)" variable="bg-green-2" />
+                    <ColorSwatch name="Primary (Green-9)" variable="bg-primary" />
+                    <ColorSwatch name="Primary Hover (Green-10)" variable="bg-green-10" />
+                    <ColorSwatch name="Secondary (Gray-3)" variable="bg-secondary" />
+                    <ColorSwatch name="Accent (Gray-3)" variable="bg-accent" />
+                    <ColorSwatch name="Muted (Gray-3)" variable="bg-muted" />
                     <ColorSwatch name="Destructive" variable="bg-destructive" />
                 </div>
             </section>
