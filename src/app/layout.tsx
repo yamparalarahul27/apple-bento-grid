@@ -72,7 +72,7 @@ export default function RootLayout({
             <main className="flex-1">{children}</main>
             <Footer />
           </div>
-          <AgentationProvider />
+          {process.env.NODE_ENV === "development" && <AgentationProvider />}
         </ThemeProvider>
       </body>
     </html>
