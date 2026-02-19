@@ -9,8 +9,8 @@ import { Program, AnchorProvider, Idl } from "@coral-xyz/anchor";
 import { CourseProgress, LearningProgressService } from "./learning-progress.service";
 import idl from "@/lib/idl/onchain_academy.json";
 
-const PROGRAM_ID = new PublicKey(process.env.NEXT_PUBLIC_PROGRAM_ID!);
-// const ACCESS_TOKEN_MINT = new PublicKey(process.env.NEXT_PUBLIC_XP_MINT!); 
+// Top-level constants should be avoided if they use environment variables that might be missing during build
+// Move them inside the service or use safe defaults
 
 export class OnChainLearningProgressService implements LearningProgressService {
     private connection: Connection;

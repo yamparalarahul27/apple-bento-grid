@@ -90,3 +90,8 @@ Logs:
 - **Cause**: The `OnChainLearningProgressService` constructor expects an Anchor `Wallet` type, but is being passed the full `WalletContextState` from `@solana/wallet-adapter-react`. While they share some fields, they are technically incompatible because the wallet adapter's `signTransaction` can be `undefined` (if the wallet is not connected).
 - **Status**: **Recorded (To Be Fixed if needed)**
 
+### Prerender Error: PublicKey _bn of undefined
+- **Error**: `TypeError: Cannot read properties of undefined (reading '_bn')` during `next build` on `/challenges`.
+- **Cause**: Top-level `PublicKey` instantiation using environment variables (e.g., `process.env.NEXT_PUBLIC_PROGRAM_ID!`) in `OnChainLearningProgressService.ts`. During prerendering, if these variables are missing, the constructor crashes on import.
+- **Fix**: Removed top-level unused `PROGRAM_ID` constant. Moved or gated any environment-variable-based `PublicKey` creation to ensure it only runs when the values are present.
+
