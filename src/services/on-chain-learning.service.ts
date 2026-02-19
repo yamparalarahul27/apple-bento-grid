@@ -17,7 +17,7 @@ export class OnChainLearningProgressService implements LearningProgressService {
     private provider: AnchorProvider;
     private program: Program;
 
-    constructor(connection: Connection, wallet: any) {
+    constructor(connection: Connection, wallet: AnchorProvider["wallet"]) {
         this.connection = connection;
         this.provider = new AnchorProvider(connection, wallet, {
             preflightCommitment: "confirmed",
@@ -149,7 +149,9 @@ export class OnChainLearningProgressService implements LearningProgressService {
             );
 
             // Fetch account
-            const accountFn = (this.program.account as any).enrollment;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const account = this.program.account as any;
+            const accountFn = account.enrollment;
             if (accountFn) {
                 const enrollment = await accountFn.fetch(enrollmentPda);
                 return {

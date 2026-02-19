@@ -53,9 +53,10 @@ export function CourseHeader({ course }: CourseHeaderProps) {
             console.log("Enrolled!", tx);
             setIsEnrolled(true);
             setShowSuccess(true);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Enrollment error:", error);
-            alert(`Enrollment failed: ${error.message}`);
+            const message = error instanceof Error ? error.message : "Unknown error";
+            alert(`Enrollment failed: ${message}`);
         } finally {
             setLoading(false);
         }

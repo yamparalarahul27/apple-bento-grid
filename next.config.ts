@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
+  serverExternalPackages: ['pino-pretty', 'pino'],
 };
 
 export default nextConfig;

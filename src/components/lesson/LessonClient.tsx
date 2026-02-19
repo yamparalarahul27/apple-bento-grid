@@ -56,9 +56,10 @@ export function LessonClient({ courseSlug, lessonId, lesson }: LessonClientProps
             const tx = await learningService.completeLesson(publicKey, courseSlug, lessonIndex);
             console.log("Lesson completed!", tx);
             setIsCompleted(true);
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Completion error:", error);
-            alert(`Failed to complete lesson: ${error.message}`);
+            const message = error instanceof Error ? error.message : "Unknown error";
+            alert(`Failed to complete lesson: ${message}`);
         } finally {
             setIsCompleting(false);
         }
