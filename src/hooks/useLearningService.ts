@@ -24,7 +24,8 @@ export function useLearningService() {
             signAllTransactions: wallet.signAllTransactions,
         };
 
-        return new OnChainLearningProgressService(connection, anchorWallet);
+        const token = typeof window !== 'undefined' ? localStorage.getItem('auth_token') : null;
+        return new OnChainLearningProgressService(connection, anchorWallet, token);
     }, [connection, wallet]);
 
     return service;

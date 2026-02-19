@@ -10,6 +10,7 @@ import { useWallet } from "@solana/wallet-adapter-react";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "./ThemeToggle";
 import { SuccessModal } from "@/components/ui/SuccessModal";
+import { useAuthContext } from "@/providers/auth-provider";
 
 import {
     NavigationMenu,
@@ -93,6 +94,7 @@ export function Header() {
     const [showSuccess, setShowSuccess] = useState(false);
     const pathname = usePathname();
     const { connected, disconnect, publicKey } = useWallet();
+    const { user, logout } = useAuthContext();
 
     // Show success modal on *first* connection
     useEffect(() => {
@@ -107,6 +109,7 @@ export function Header() {
     }, [connected]);
 
     const handleLogout = async () => {
+        logout();
         await disconnect();
         window.location.href = "/";
     };
@@ -204,7 +207,7 @@ export function Header() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-56 bg-surface border-border p-2">
                                 <DropdownMenuLabel className="text-text-primary px-2 py-1.5 font-bold">
-                                    {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "My Account"}
+                                    {user?.displayName || (publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "My Account")}
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator className="bg-border" />
                                 <DropdownMenuItem asChild>
@@ -290,7 +293,7 @@ export function Header() {
                                         </div>
                                         <div className="flex flex-col">
                                             <span className="font-bold text-text-primary">
-                                                {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "Rahul Yamparala"}
+                                                {user?.displayName || (publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "User")}
                                             </span>
                                             <span className="text-sm text-text-secondary">View Profile</span>
                                         </div>

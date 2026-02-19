@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Connection, Keypair, Transaction, PublicKey } from "@solana/web3.js";
+import { Keypair, Transaction, PublicKey } from "@solana/web3.js";
 import { getBackendKeypair } from "@/lib/server-utils";
+import jwt from "jsonwebtoken";
 
 // Prevent this route from being statically cached
 export const dynamic = 'force-dynamic';
@@ -9,6 +10,20 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { serializedTx } = body;
+        const authHeader = req.headers.get('Authorization');
+
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return NextResponse.json({ error: "Missing or invalid authorization" }, { status: 401 });
+        }
+
+        const token = authHeader.split(' ')[1];
+        let decoded: string | jwt.JwtPayload;
+        try {
+            decoded = jwt.verify(token, process.env.JWT_SECRET || 'REMOVED_SECRET');
+            console.log(`Authenticated request from user: ${typeof decoded === 'string' ? decoded : decoded.sub}`);
+        } catch {
+            return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+        }
 
         if (!serializedTx) {
             return NextResponse.json(

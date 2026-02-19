@@ -16,9 +16,11 @@ export class OnChainLearningProgressService implements LearningProgressService {
     private connection: Connection;
     private provider: AnchorProvider;
     private program: Program;
+    private token: string | null;
 
-    constructor(connection: Connection, wallet: AnchorProvider["wallet"]) {
+    constructor(connection: Connection, wallet: AnchorProvider["wallet"], token: string | null = null) {
         this.connection = connection;
+        this.token = token;
         this.provider = new AnchorProvider(connection, wallet, {
             preflightCommitment: "confirmed",
         });
@@ -114,7 +116,10 @@ export class OnChainLearningProgressService implements LearningProgressService {
             // 4. Send to Backend Signer API
             const response = await fetch("/api/actions/sign-completion", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                    ...(this.token ? { "Authorization": `Bearer ${this.token}` } : {})
+                },
                 body: JSON.stringify({
                     serializedTx: signedTx.serialize({ requireAllSignatures: false }).toString("base64")
                 }),
@@ -163,13 +168,13 @@ export class OnChainLearningProgressService implements LearningProgressService {
                 };
             }
             return null;
-        } catch (e) {
+        } catch {
             // Account not found = not enrolled
             return null;
         }
     }
 
-    async getXPBalance(wallet: PublicKey): Promise<number> {
+    async getXPBalance(_wallet: PublicKey): Promise<number> {
         // Placeholder implementation
         return 0;
     }

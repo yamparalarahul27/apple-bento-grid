@@ -1,59 +1,37 @@
-# Project Implementation Plan — Superteam Brazil Academy
+# Project Roadmap: Completion Plan — Superteam Academy
 
-This document outlines the systematic implementation roadmap for the Superteam Brazil Academy, transitioning from static UI mocks to a fully functional, on-chain integrated learning platform.
+This document outlines the final steps to transition the Superteam Academy from an integrated frontend frame to a fully functional, content-driven learning platform.
 
-## Current Progress Status
-- [x] **Brand Identity**: Typography, colors, and design system foundations.
-- [x] **Settings Page**: Full profile, account, and preference management UI.
-- [x] **Certificate View**: High-fidelity visual credentials with on-chain metadata.
-- [x] **Quick Verification**: Slide-over panel with live Solana Explorer integration.
-- [x] **Navigation & Layout**: Branded 404 page, responsive headers, and dashboard thumbnails.
+## 1. Authentication & Identity (Phase 1)
+**Goal**: Secure, wallet-native user sessions and profile persistence.
+- **Supabase Integration**: Set up tables for `users`, `activity_log`, and `streaks`.
+- **Wallet-Native Auth**: Implement the nonce-signing handshake:
+  - Frontend signs a nonce from the backend.
+  - Backend verifies and issues a JWT.
+- **Account Linking**: Implement Google OAuth linking as per scope.
 
----
+## 2. Dynamic Content: Sanity CMS (Phase 2)
+**Goal**: Replace mock content with the actual curriculum.
+- **Sanity Client**: Connect the frontend to the Sanity dataset.
+- **GROQ Queries**: Implement fetching for Course Catalog, Module structure, and Lesson content.
+- **Markdown Mapping**: Ensure lesson content renders beautifully with syntax highlighting.
 
-## Phase 1: Foundation & Identity (Backend)
-*Objective: Set up the core API infrastructure and secure user authentication.*
+## 3. Advanced On-Chain Features (Phase 3)
+**Goal**: Automated XP rewards and verifiable credentials.
+- **Metaplex Core Lifecycle**: 
+  - Automate `issue_credential` when a track is completed.
+  - Implement `upgrade_credential` to evolve user NFTs as they gain XP.
+- **Leaderboard Indexing**: Integrate Helius DAS API to fetch XP (Token-2022) balances for global rankings.
 
-- [ ] **Infrastructure Setup**
-    - [ ] Initialize Node.js/TypeScript backend project.
-    - [ ] Configure Supabase/PostgreSQL schema (Users, Streaks, logs).
-- [ ] **Secure Authentication**
-    - [ ] Implement Nonce-based wallet signature verification.
-    - [ ] JWT issuance and refresh logic for secure session management.
+## 4. Gamification & UX (Phase 4)
+**Goal**: Drive engagement through daily interactions.
+- **Streak Service**: Implement a Supabase-backed service to track daily activity and show the heatmap calendar.
+- **Solana Playground Embedding**: Finalize the iframe integration for the code editor, enabling "Run/Test" functionality.
+- **i18n Completion**: Map all UI strings to translation files for PT-BR, ES, and EN.
 
-## Phase 2: On-Chain Service Layer
-*Objective: Enable backend-signed transactions for anti-cheat and automated rewards.*
+## 5. Verification & Launch (Phase 5)
+- **Production Build**: Local `npm run build` is already passing. Final check on Vercel.
+- **Devnet Trial**: End-to-end walk through of the "New User" flow (Course discovery -> Enrollment -> Lesson completion -> XP award -> Metadata update).
 
-- [ ] **Anchor Integration**
-    - [ ] Build `@coral-xyz/anchor` service layer with rotatable backend signer.
-- [ ] **Instruction Handlers**
-    - [ ] Implement `complete_lesson` (Bitmap updates).
-    - [ ] Implement `reward_xp` (Platform milestones).
-
-## Phase 3: Gamification & Leaderboard
-*Objective: Drive user engagement through streaks and competitive indexing.*
-
-- [ ] **Streak Service**
-    - [ ] Implement persistence logic for current/longest streaks and activity logs.
-- [ ] **Helius Indexer**
-    - [ ] Integrate DAS API to fetch XP token balances.
-    - [ ] Scheduled jobs to cache global/weekly/monthly rankings.
-
-## Phase 4: Credentials & Metaplex Core
-*Objective: Automate the issuance and evolution of soulbound NFT credentials.*
-
-- [ ] **NFT Lifecycle**
-    - [ ] Implement `issue_credential` for first-time track completion.
-    - [ ] Implement `upgrade_credential` for evolving existing assets.
-- [ ] **Achievements**
-    - [ ] Logic for claiming specialized achievement badges.
-
-## Phase 5: Production & Distribution
-*Objective: Sync frontend, optimize performance, and final handoff.*
-
-- [ ] **Frontend-Backend Sync**
-    - [ ] Swap UI stubs for live Backend API calls.
-    - [ ] Sanity CMS dynamic content integration.
-- [ ] **Final Polish**
-    - [ ] Sentry error monitoring and final Devnet verification.
-    - [ ] SEO Metadata and Lighthouse performance audits.
+## Next Immediate Task
+I recommend starting with **Phase 1: Authentication & Identity**, as it creates the necessary database layer for Streaks and Profile features.

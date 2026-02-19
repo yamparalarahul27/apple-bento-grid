@@ -13,7 +13,7 @@ export class LocalLearningProgressService implements LearningProgressService {
         return "mock_tx_signature";
     }
 
-    async getCourseProgress(wallet: PublicKey, courseId: string): Promise<CourseProgress | null> {
+    async getCourseProgress(_wallet: PublicKey, courseId: string): Promise<CourseProgress | null> {
         // Mock progress
         return {
             courseId,
