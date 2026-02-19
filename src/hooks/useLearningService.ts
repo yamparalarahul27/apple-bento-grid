@@ -14,11 +14,17 @@ export function useLearningService() {
             return localLearningService;
         }
 
-        if (!wallet || !wallet.publicKey) {
+        if (!wallet || !wallet.publicKey || !wallet.signTransaction || !wallet.signAllTransactions) {
             return null;
         }
 
-        return new OnChainLearningProgressService(connection, wallet);
+        const anchorWallet = {
+            publicKey: wallet.publicKey,
+            signTransaction: wallet.signTransaction,
+            signAllTransactions: wallet.signAllTransactions,
+        };
+
+        return new OnChainLearningProgressService(connection, anchorWallet);
     }, [connection, wallet]);
 
     return service;

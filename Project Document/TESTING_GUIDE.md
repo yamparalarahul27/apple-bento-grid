@@ -82,3 +82,11 @@ Logs:
   "Program 8iSxN2Va5bJJzJDRsenGM3JVyuXtG8vwp5tZcYZ7cXAR failed: custom program error: 0x1770"
 ]
 ```
+
+### Deployment Error: Wallet Type Mismatch
+- **Error Type**: Vercel Build Failure (TypeScript)
+- **Error Message**: `Type error: Argument of type 'WalletContextState' is not assignable to parameter of type 'Wallet'.`
+- **Location**: `src/hooks/useLearningService.ts` (likely around line 21)
+- **Cause**: The `OnChainLearningProgressService` constructor expects an Anchor `Wallet` type, but is being passed the full `WalletContextState` from `@solana/wallet-adapter-react`. While they share some fields, they are technically incompatible because the wallet adapter's `signTransaction` can be `undefined` (if the wallet is not connected).
+- **Status**: **Recorded (To Be Fixed if needed)**
+
