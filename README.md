@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Superteam Brazil Academy
 
-## Getting Started
+Welcome to **Superteam Brazil Academy**, an on-chain education platform designed to onboard and certify builders in the Solana ecosystem. This repository contains the complete frontend and on-chain program code.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Project Overview
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Superteam Brazil Academy provides a gamified learning experience where users:
+- **Enroll** in developer tracks and courses.
+- **Earn XP** for completing lessons and achievements.
+- **Receive Certification** in the form of Soulbound (non-transferable) NFTs powered by **Metaplex Core**.
+- **Build Reputation** through a transparent, on-chain curriculum.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🏗️ Architecture
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The system consists of three main parts:
+1.  **Frontend**: A modern, high-performance Next.js web application.
+2.  **On-Chain Program**: An Anchor-based Solana program managing enrollments, XP, and credentials.
+3.  **Backend Signer**: A secure service that co-signs transactions to verify lesson completions (anti-cheat).
 
-## Learn More
+Refer to [ARCHITECTURE.md](web/Project Document/ARCHITECTURE.md) for a detailed technical breakdown.
 
-To learn more about Next.js, take a look at the following resources:
+## 📂 Repository Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `/web`: The Next.js frontend application.
+- `/superteam-academy`: The Solana on-chain program (Anchor workspace).
+- `/web/Project Document`: Technical specifications, integration guides, and deployment manuals.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🛠️ Getting Started
 
-## Deploy on Vercel
+### Prerequisites
+- Node.js 18+
+- Solana CLI & Anchor CLI (for program development)
+- Rust (for program development)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Frontend Setup
+1. Move to the web directory: `cd web`
+2. Install dependencies: `npm install`
+3. Configure your environment: `cp .env.example .env.local`
+4. Run locally: `npm run dev`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Program Setup
+Refer to the [DEPLOY-PROGRAM.md](web/Project Document/DEPLOY-PROGRAM.md) for detailed instructions on building and deploying your own instance to Devnet.
+
+## 📄 License
+This project is licensed under the MIT License - see the [LICENSE](web/LICENSE) file for details.

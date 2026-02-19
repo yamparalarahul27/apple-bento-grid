@@ -4,6 +4,14 @@ import { CheckCircle2, ShieldCheck, Search } from "lucide-react";
 import { useState } from "react";
 import { CertificateVerificationSheet } from "./CertificateVerificationSheet";
 
+/**
+ * Properties for the CertificateCard component.
+ * @interface CertificateCardProps
+ * @property {string} courseTitle - The title of the completed course.
+ * @property {string} recipientName - The name of the learner who earned the certificate.
+ * @property {string} completionDate - The date the course was finalized.
+ * @property {string} mintAddress - The on-chain address (Metaplex Core Asset) of the certificate.
+ */
 interface CertificateCardProps {
     courseTitle: string;
     recipientName: string;
@@ -11,6 +19,14 @@ interface CertificateCardProps {
     mintAddress: string;
 }
 
+/**
+ * A premium UI component for displaying verifiable Solana certificates.
+ * 
+ * Features:
+ * - Animated gradients and grain overlays for a high-end look.
+ * - Interactive QR code section that opens a verification sheet.
+ * - Displays the mint address for on-chain proof.
+ */
 export function CertificateCard({ courseTitle, recipientName, completionDate, mintAddress }: CertificateCardProps) {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
 

@@ -12,11 +12,25 @@ import { Button } from "@/components/ui/button";
 import ReactConfetti from "react-confetti";
 import { useEffect, useState } from "react";
 
+/**
+ * Properties for the SuccessModal component.
+ * @interface SuccessModalProps
+ * @property {boolean} isOpen - Controls the visibility of the modal.
+ * @property {() => void} onClose - Callback function to fire when the modal is dismissed.
+ */
 interface SuccessModalProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+/**
+ * A celebratory modal with confetti that appears after successful wallet connection.
+ * 
+ * Features:
+ * - Responsive confetti effect using `react-confetti`.
+ * - Animated check icon and success message.
+ * - Call-to-action button to proceed with the application.
+ */
 export function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
     const [windowSize, setWindowSize] = useState({
         width: typeof window !== "undefined" ? window.innerWidth : 0,

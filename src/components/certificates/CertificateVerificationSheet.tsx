@@ -11,6 +11,14 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink, Copy, Check, Twitter, Share2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
+/**
+ * Properties for the CertificateVerificationSheet component.
+ * @interface CertificateVerificationSheetProps
+ * @property {boolean} isOpen - Controls the visibility of the side drawer.
+ * @property {() => void} onClose - Callback function to close the drawer.
+ * @property {string} mintAddress - The on-chain address of the certificate.
+ * @property {string} courseTitle - The name of the course for verification context.
+ */
 interface CertificateVerificationSheetProps {
     isOpen: boolean;
     onClose: () => void;
@@ -18,6 +26,15 @@ interface CertificateVerificationSheetProps {
     courseTitle: string;
 }
 
+/**
+ * A slide-out panel that allows users to verify and share their certificates.
+ * 
+ * Features:
+ * - Direct link to view the certificate asset on the Solana Explorer.
+ * - Social sharing integration (Twitter/X).
+ * - "Copy Link" functionality for sharing proof of achievement.
+ * - Embedded iframe showing the live explorer view for immediate verification.
+ */
 export function CertificateVerificationSheet({
     isOpen,
     onClose,
