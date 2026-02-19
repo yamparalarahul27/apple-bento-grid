@@ -1,13 +1,66 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
-import { Clock, BarChart, Trophy, ArrowLeft } from "lucide-react";
+import { Clock, BarChart, Trophy, ArrowLeft, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { Course } from "./CourseCard"; // Re-using interface
+import { useLearningService } from "@/hooks/useLearningService";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { useEffect, useState } from "react";
+import { SuccessModal } from "@/components/ui/SuccessModal";
+
 
 interface CourseHeaderProps {
     course: Course;
 }
 
 export function CourseHeader({ course }: CourseHeaderProps) {
+    const { connected, publicKey } = useWallet();
+    const learningService = useLearningService();
+
+    const [isEnrolled, setIsEnrolled] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [checkingStatus, setCheckingStatus] = useState(false);
+    const [showSuccess, setShowSuccess] = useState(false);
+
+    useEffect(() => {
+        const checkEnrollment = async () => {
+            if (connected && publicKey && learningService) {
+                setCheckingStatus(true);
+                try {
+                    const progress = await learningService.getCourseProgress(publicKey, course.slug);
+                    setIsEnrolled(!!progress);
+                } catch (e) {
+                    console.error("Failed to check enrollment:", e);
+                } finally {
+                    setCheckingStatus(false);
+                }
+            }
+        };
+        checkEnrollment();
+    }, [connected, publicKey, learningService, course.slug]);
+
+    const handleEnroll = async () => {
+        if (!connected || !publicKey) {
+            alert("Please connect your wallet first.");
+            return;
+        }
+        if (!learningService) return;
+
+        setLoading(true);
+        try {
+            const tx = await learningService.enroll(publicKey, course.slug);
+            console.log("Enrolled!", tx);
+            setIsEnrolled(true);
+            setShowSuccess(true);
+        } catch (error: any) {
+            console.error("Enrollment error:", error);
+            alert(`Enrollment failed: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="bg-surface border-b border-border pb-12 pt-8">
             <div className="container px-4 md:px-6">
@@ -18,9 +71,16 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                 <div className="flex flex-col md:flex-row gap-8 items-start">
                     <div className="flex-1 space-y-6">
                         <div className="space-y-4">
-                            <Badge variant={course.difficulty === "Beginner" ? "default" : "secondary"}>
-                                {course.difficulty}
-                            </Badge>
+                            <div className="flex items-center gap-3">
+                                <Badge variant={course.difficulty === "Beginner" ? "default" : "secondary"}>
+                                    {course.difficulty}
+                                </Badge>
+                                {isEnrolled && (
+                                    <Badge variant="outline" className="border-primary text-primary">
+                                        Enrolled
+                                    </Badge>
+                                )}
+                            </div>
                             <h1 className="text-display-2 font-bold text-text-primary leading-tight">
                                 {course.title}
                             </h1>
@@ -45,11 +105,32 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                         </div>
 
                         <div className="pt-4">
-                            <button className="rounded-lg bg-primary px-8 py-4 text-h4 font-bold text-primary-foreground transition-all hover:bg-green-10 hover:shadow-lg active:scale-95">
-                                Enroll Verification
-                            </button>
+                            {!connected ? (
+                                <div className="p-4 bg-surface-2 rounded-lg border border-border inline-block">
+                                    <p className="font-bold text-text-primary">Connect Wallet to Enroll</p>
+                                    <p className="text-sm text-text-secondary">Use the button in the header to connect.</p>
+                                </div>
+                            ) : (
+                                <>
+                                    {isEnrolled ? (
+                                        <button className="rounded-lg bg-surface-2 px-8 py-4 text-h4 font-bold text-text-primary border border-primary cursor-default">
+                                            Continue Learning
+                                        </button>
+                                    ) : (
+                                        <button
+                                            onClick={handleEnroll}
+                                            disabled={loading || checkingStatus}
+                                            className="rounded-lg bg-primary px-8 py-4 text-h4 font-bold text-primary-foreground transition-all hover:bg-green-10 hover:shadow-lg active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                        >
+                                            {loading ? <Loader2 className="animate-spin" /> : null}
+                                            {loading ? "Enrolling..." : "Enroll in Course"}
+                                        </button>
+                                    )}
+                                </>
+                            )}
+
                             <p className="mt-2 text-caption text-text-secondary">
-                                * Requires wallet connection (Mock for Phase 1)
+                                * {connected ? "Ready to enroll on Devnet" : "Requires wallet connection"}
                             </p>
                         </div>
                     </div>
@@ -63,6 +144,13 @@ export function CourseHeader({ course }: CourseHeaderProps) {
                     </div>
                 </div>
             </div>
+            <SuccessModal
+                isOpen={showSuccess}
+                onClose={() => setShowSuccess(false)}
+                title="Enrollment Successful!"
+                description={`You have successfully enrolled in ${course.title}. Good luck on your learning journey!`}
+                buttonText="Start Learning"
+            />
         </div>
     );
 }

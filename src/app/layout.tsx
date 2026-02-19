@@ -54,6 +54,7 @@ import { AgentationProvider } from "@/components/AgentationProvider";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { SolanaProvider } from "@/providers/solana-provider";
 
 export default function RootLayout({
   children,
@@ -67,12 +68,14 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <ThemeProvider>
-          <div className="flex min-h-screen flex-col text-text-primary font-sans">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-          {process.env.NODE_ENV === "development" && <AgentationProvider />}
+          <SolanaProvider>
+            <div className="flex min-h-screen flex-col text-text-primary font-sans">
+              <Header />
+              <main className="flex-1">{children}</main>
+              <Footer />
+            </div>
+            {process.env.NODE_ENV === "development" && <AgentationProvider />}
+          </SolanaProvider>
         </ThemeProvider>
       </body>
     </html>

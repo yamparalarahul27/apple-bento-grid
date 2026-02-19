@@ -25,14 +25,44 @@ interface LessonClientProps {
     };
 }
 
+import { useLearningService } from "@/hooks/useLearningService";
+import { useWallet } from "@solana/wallet-adapter-react";
+import { Loader2 } from "lucide-react";
+
 export function LessonClient({ courseSlug, lessonId, lesson }: LessonClientProps) {
     // Layout state
     const [isClient, setIsClient] = useState(false);
     const [isCompleted, setIsCompleted] = useState(false);
+    const [isCompleting, setIsCompleting] = useState(false);
+
+    const { connected, publicKey } = useWallet();
+    const learningService = useLearningService();
 
     useEffect(() => {
         setIsClient(true);
     }, []);
+
+    const handleComplete = async () => {
+        if (!connected || !publicKey) {
+            alert("Please connect your wallet first.");
+            return;
+        }
+        if (!learningService) return;
+
+        setIsCompleting(true);
+        try {
+            // Assume lessonId "1" -> index 0
+            const lessonIndex = parseInt(lessonId) - 1;
+            const tx = await learningService.completeLesson(publicKey, courseSlug, lessonIndex);
+            console.log("Lesson completed!", tx);
+            setIsCompleted(true);
+        } catch (error: any) {
+            console.error("Completion error:", error);
+            alert(`Failed to complete lesson: ${error.message}`);
+        } finally {
+            setIsCompleting(false);
+        }
+    };
 
     if (!isClient) return null; // Avoid hydration mismatch on resize panels
 
@@ -60,9 +90,11 @@ export function LessonClient({ courseSlug, lessonId, lesson }: LessonClientProps
                     <Button
                         size="sm"
                         className="bg-primary text-primary-foreground hover:bg-green-10 font-bold"
-                        onClick={() => setIsCompleted(true)}
+                        onClick={handleComplete}
+                        disabled={isCompleting || isCompleted}
                     >
-                        <CheckCircle className="w-4 h-4 mr-2" /> Mark Complete
+                        {isCompleting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CheckCircle className="w-4 h-4 mr-2" />}
+                        {isCompleting ? "Signing..." : (isCompleted ? "Completed" : "Mark Complete")}
                     </Button>
                 </div>
             </div>

@@ -18,20 +18,21 @@ import { useEffect, useState } from "react";
  * @property {boolean} isOpen - Controls the visibility of the modal.
  * @property {() => void} onClose - Callback function to fire when the modal is dismissed.
  */
-interface SuccessModalProps {
+export interface SuccessModalProps {
     isOpen: boolean;
     onClose: () => void;
+    title?: string;
+    description?: string;
+    buttonText?: string;
 }
 
-/**
- * A celebratory modal with confetti that appears after successful wallet connection.
- * 
- * Features:
- * - Responsive confetti effect using `react-confetti`.
- * - Animated check icon and success message.
- * - Call-to-action button to proceed with the application.
- */
-export function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
+export function SuccessModal({
+    isOpen,
+    onClose,
+    title = "Wallet Connected!",
+    description = "Your wallet has been successfully linked to Superteam Brazil Academy. You're ready to start your journey.",
+    buttonText = "Let's Build"
+}: SuccessModalProps) {
     const [windowSize, setWindowSize] = useState({
         width: typeof window !== "undefined" ? window.innerWidth : 0,
         height: typeof window !== "undefined" ? window.innerHeight : 0,
@@ -66,10 +67,10 @@ export function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
                 </div>
                 <DialogHeader className="space-y-2">
                     <DialogTitle className="text-2xl font-bold text-text-primary text-center">
-                        Wallet Connected!
+                        {title}
                     </DialogTitle>
                     <DialogDescription className="text-text-secondary text-center text-base">
-                        Your wallet has been successfully linked to Superteam Brazil Academy. You&apos;re ready to start your journey.
+                        {description}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="mt-8 w-full">
@@ -77,7 +78,7 @@ export function SuccessModal({ isOpen, onClose }: SuccessModalProps) {
                         onClick={onClose}
                         className="w-full bg-primary text-primary-foreground hover:bg-green-10 font-bold py-6 text-lg"
                     >
-                        Let&apos;s Build
+                        {buttonText}
                     </Button>
                 </div>
             </DialogContent>

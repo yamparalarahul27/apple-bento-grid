@@ -4,8 +4,9 @@ import { Menu, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
-import { WalletConnectButton } from "@/components/ui/WalletConnectButton";
+import { useState, useEffect } from "react";
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
+import { useWallet } from "@solana/wallet-adapter-react";
 import { Input } from "@/components/ui/input";
 import { ThemeToggle } from "./ThemeToggle";
 import { SuccessModal } from "@/components/ui/SuccessModal";
@@ -89,35 +90,24 @@ import { User, Settings, LogOut } from "lucide-react";
 
 export function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const pathname = usePathname();
+    const { connected, disconnect, publicKey } = useWallet();
 
-    // Persist mock connection state
-    React.useEffect(() => {
-        const connected = localStorage.getItem("mock_connected") === "true";
-        setIsConnected(connected);
+    // Show success modal on *first* connection
+    useEffect(() => {
+        if (connected) {
+            // Check if we've already shown the success modal for this session/wallet
+            const hasShown = sessionStorage.getItem("has_shown_success_modal");
+            if (!hasShown) {
+                setShowSuccess(true);
+                sessionStorage.setItem("has_shown_success_modal", "true");
+            }
+        }
+    }, [connected]);
 
-        const handleStorageChange = () => {
-            setIsConnected(localStorage.getItem("mock_connected") === "true");
-        };
-
-        window.addEventListener("storage", handleStorageChange);
-        return () => window.removeEventListener("storage", handleStorageChange);
-    }, []);
-
-    const handleConnect = () => {
-        // Mock connection logic
-        localStorage.setItem("mock_connected", "true");
-        setShowSuccess(true);
-        setIsConnected(true);
-        setIsMenuOpen(false);
-    };
-
-    const handleLogout = () => {
-        localStorage.removeItem("mock_connected");
-        window.dispatchEvent(new Event("storage"));
-        setIsConnected(false);
+    const handleLogout = async () => {
+        await disconnect();
         window.location.href = "/";
     };
 
@@ -198,7 +188,7 @@ export function Header() {
                 {/* Desktop Actions */}
                 <div className="hidden items-center gap-4 md:flex">
                     <ThemeToggle />
-                    {isConnected ? (
+                    {connected ? (
                         <DropdownMenu>
                             <DropdownMenuTrigger className="relative group outline-none">
                                 <div className="w-10 h-10 rounded-full border-2 border-primary overflow-hidden transition-all hover:scale-105 active:scale-95 group-hover:shadow-[0_0_15px_rgba(20,241,149,0.4)]">
@@ -213,7 +203,9 @@ export function Header() {
                                 <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-surface animate-pulse" />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end" className="w-56 bg-surface border-border p-2">
-                                <DropdownMenuLabel className="text-text-primary px-2 py-1.5 font-bold">My Account</DropdownMenuLabel>
+                                <DropdownMenuLabel className="text-text-primary px-2 py-1.5 font-bold">
+                                    {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "My Account"}
+                                </DropdownMenuLabel>
                                 <DropdownMenuSeparator className="bg-border" />
                                 <DropdownMenuItem asChild>
                                     <Link href="/profile" className="flex items-center gap-2 px-2 py-2 text-text-secondary hover:text-primary cursor-pointer focus:bg-surface-2">
@@ -238,7 +230,9 @@ export function Header() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     ) : (
-                        <WalletConnectButton onClick={handleConnect} />
+                        <div className="wallet-adapter-dropdown">
+                            <WalletMultiButton style={{ backgroundColor: 'var(--primary)', color: 'var(--primary-foreground)', fontWeight: 'bold' }} />
+                        </div>
                     )}
                 </div>
 
@@ -278,7 +272,7 @@ export function Header() {
                             );
                         })}
                         <div className="pt-8 flex flex-col gap-4">
-                            {isConnected ? (
+                            {connected ? (
                                 <>
                                     <Link
                                         href="/profile"
@@ -295,7 +289,9 @@ export function Header() {
                                             />
                                         </div>
                                         <div className="flex flex-col">
-                                            <span className="font-bold text-text-primary">Rahul Yamparala</span>
+                                            <span className="font-bold text-text-primary">
+                                                {publicKey ? `${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}` : "Rahul Yamparala"}
+                                            </span>
                                             <span className="text-sm text-text-secondary">View Profile</span>
                                         </div>
                                     </Link>
@@ -321,7 +317,9 @@ export function Header() {
                                     </button>
                                 </>
                             ) : (
-                                <WalletConnectButton onClick={handleConnect} />
+                                <div className="w-full flex justify-center wallet-adapter-dropdown">
+                                    <WalletMultiButton style={{ backgroundColor: 'var(--primary)', color: 'var(--primary-foreground)', fontWeight: 'bold', width: '100%', justifyContent: 'center' }} />
+                                </div>
                             )}
                         </div>
                     </div>
