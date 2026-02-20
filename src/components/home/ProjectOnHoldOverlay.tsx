@@ -28,13 +28,15 @@ export function ProjectOnHoldOverlay({ onExplore }: ProjectOnHoldOverlayProps) {
                         </h1>
                         <p className="text-xl md:text-2xl text-text-secondary leading-relaxed">
                             Project is on Hold, as priority is changed. <br className="hidden md:block" />
-                            This project was started as part of a bounty by Superteam Brazil
+                            This project was started as part of a
+                            <br />
+                            bounty by Superteam Brazil
                         </p>
                     </div>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
                         <Link href="https://yamparalaux.vercel.app" target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                            <Button size="lg" className="w-full sm:w-auto group bg-primary hover:bg-green-10 text-white font-bold h-12 px-8 rounded-xl shadow-lg shadow-primary/20 transition-all hover:scale-105">
+                            <Button size="lg" className="w-full sm:w-auto group bg-primary hover:bg-green-10 text-white font-bold h-12 px-8 rounded-none shadow-lg shadow-primary/20 transition-all hover:scale-105">
                                 <User className="mr-2 h-5 w-5" />
                                 View Builder
                             </Button>
@@ -44,10 +46,10 @@ export function ProjectOnHoldOverlay({ onExplore }: ProjectOnHoldOverlayProps) {
                             variant="outline"
                             size="lg"
                             onClick={onExplore}
-                            className="w-full sm:w-auto border-border bg-surface hover:bg-surface-2 text-text-primary h-12 px-8 rounded-xl transition-all hover:scale-105"
+                            className="w-full sm:w-auto border-border bg-surface hover:bg-surface-2 text-text-primary h-12 px-8 rounded-none transition-all hover:scale-105"
                         >
                             <Eye className="mr-2 h-5 w-5" />
-                            Continue, I want to Explore
+                            Continue
                             <MoveRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                         </Button>
                     </div>
