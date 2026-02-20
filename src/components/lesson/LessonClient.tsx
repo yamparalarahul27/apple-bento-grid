@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { ChevronLeft, ChevronRight, CheckCircle } from "lucide-react";
+import { SanityContent } from "@/components/shared/SanityContent";
+import { PortableTextBlock } from "@portabletext/types";
 
 import {
     ResizableHandle,
@@ -19,9 +19,9 @@ interface LessonClientProps {
     courseSlug: string;
     lessonId: string;
     lesson: {
-        id: string;
+        _id: string;
         title: string;
-        content?: string;
+        content?: PortableTextBlock[];
     };
 }
 
@@ -108,9 +108,7 @@ export function LessonClient({ courseSlug, lessonId, lesson }: LessonClientProps
                     <ResizablePanel defaultSize={40} minSize={20} className="bg-background">
                         <div className="h-full w-full overflow-y-auto p-8 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
                             <article className="prose prose-invert prose-green max-w-none prose-headings:text-text-primary prose-p:text-text-secondary prose-strong:text-text-primary prose-code:text-primary">
-                                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                    {lesson.content || "No content available for this lesson."}
-                                </ReactMarkdown>
+                                <SanityContent value={lesson.content} />
                             </article>
                         </div>
                     </ResizablePanel>

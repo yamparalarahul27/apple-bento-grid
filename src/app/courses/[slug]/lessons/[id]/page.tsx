@@ -1,30 +1,21 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { MOCK_COURSES } from "@/data/mock-courses";
 import { LessonClient } from "@/components/lesson/LessonClient";
+import { CurriculumService } from "@/services/curriculum.service";
+import { PortableTextBlock } from "@portabletext/types";
 
 interface PageProps {
     params: Promise<{
-        slug: string;
-        id: string; // lessonId
+        slug: string; // courseSlug
+        id: string;   // lessonSlug
     }>
 }
 
-// Helper to find lesson
-const getLessonData = (courseSlug: string, lessonId: string) => {
-    const course = MOCK_COURSES.find((c) => c.id === courseSlug);
-    if (!course?.modules) return null;
-
-    for (const mod of course.modules) {
-        const lesson = mod.lessons.find((l) => l.id === lessonId);
-        if (lesson) return lesson;
-    }
-    return null;
-};
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
     const { slug, id } = await params;
-    const lesson = getLessonData(slug, id);
+    const lesson = await CurriculumService.getLessonBySlug(slug, id);
 
     if (!lesson) {
         return {
@@ -40,35 +31,46 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function LessonPage({ params }: PageProps) {
     const { slug, id } = await params;
-    const lesson = getLessonData(slug, id);
+    const lesson = await CurriculumService.getLessonBySlug(slug, id);
 
     if (!lesson) {
         return notFound();
     }
 
+    // Explicitly typed lesson to satisfy strict any check
+    const typedLesson = lesson as unknown as {
+        _id: string;
+        title: string;
+        content?: PortableTextBlock[];
+    };
+
     return (
         <LessonClient
             courseSlug={slug}
             lessonId={id}
-            lesson={lesson}
+            lesson={typedLesson}
         />
     );
 }
 
-// Optional: Static Params for SSG
-export function generateStaticParams() {
+export async function generateStaticParams() {
+    const courses = await CurriculumService.getCourses();
     const params: { slug: string; id: string }[] = [];
 
-    MOCK_COURSES.forEach(course => {
-        course.modules?.forEach(mod => {
-            mod.lessons.forEach(lesson => {
-                params.push({
-                    slug: course.id,
-                    id: lesson.id
-                });
-            });
-        });
-    });
+    for (const course of courses) {
+        // We need the full course to get the lesson slugs
+        const fullCourse = await CurriculumService.getCourseBySlug(course.slug);
+        if (fullCourse?.modules) {
+            for (const mod of fullCourse.modules) {
+                for (const lesson of mod.lessons) {
+                    params.push({
+                        slug: fullCourse.slug,
+                        id: lesson.slug
+                    });
+                }
+            }
+        }
+    }
 
     return params;
 }

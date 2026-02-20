@@ -2,12 +2,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { Clock, BarChart } from "lucide-react";
 import { Module } from "@/components/courses/ModuleList";
+import { urlFor } from "@/lib/sanity";
 
 export interface Course {
     id: string;
     title: string;
     description: string;
-    thumbnail: string;
+    thumbnail: unknown;
     difficulty: "Beginner" | "Intermediate" | "Advanced";
     duration: string;
     modules: number;
@@ -30,12 +31,18 @@ export function CourseCard({ course }: { course: Course }) {
             className="group flex flex-col overflow-hidden rounded-xl border border-border bg-surface transition-all hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl"
         >
             <div className="relative aspect-video w-full overflow-hidden bg-surface-2">
-                <Image
-                    src={course.thumbnail}
-                    alt={course.title}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
+                {course.thumbnail ? (
+                    <Image
+                        src={typeof course.thumbnail === 'string' ? course.thumbnail : urlFor(course.thumbnail).url()}
+                        alt={course.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-surface-3 text-text-secondary transition-transform duration-300 group-hover:scale-105">
+                        <span className="text-sm font-medium">No Thumbnail</span>
+                    </div>
+                )}
                 <div className="absolute top-2 right-2">
                     <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ${difficultyColor[course.difficulty]}`}>
                         {course.difficulty}

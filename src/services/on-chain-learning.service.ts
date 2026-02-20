@@ -174,8 +174,55 @@ export class OnChainLearningProgressService implements LearningProgressService {
         }
     }
 
-    async getXPBalance(_wallet: PublicKey): Promise<number> {
-        // Placeholder implementation
-        return 0;
+    async getXPBalance(wallet: PublicKey): Promise<number> {
+        try {
+            const rpcUrl = this.connection.rpcEndpoint;
+
+            // 1. Attempt using Helius DAS API (searchAssets)
+            const response = await fetch(rpcUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    id: 'get-xp-balance',
+                    method: 'searchAssets',
+                    params: {
+                        ownerAddress: wallet.toBase58(),
+                        tokenType: 'fungible',
+                        limit: 1000
+                    },
+                }),
+            });
+
+            if (response.ok) {
+                const json = await response.json();
+
+                // If RPC supports DAS API, process the result
+                if (!json.error && json.result?.items) {
+                    const xpMint = process.env.NEXT_PUBLIC_XP_MINT;
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const xpAsset = json.result.items.find((item: any) => item.id === xpMint);
+
+                    if (xpAsset?.token_info) {
+                        const balance = xpAsset.token_info.balance || 0;
+                        const decimals = xpAsset.token_info.decimals || 0;
+                        return balance / Math.pow(10, decimals);
+                    }
+                    return 0; // Asset not found means 0 balance
+                }
+            }
+
+            // 2. Fallback to standard SPL token fetch if DAS is not supported or failed
+            console.warn("DAS API searchAssets not supported or failed. Falling back to getParsedTokenAccountsByOwner.");
+            const xpMintKey = new PublicKey(process.env.NEXT_PUBLIC_XP_MINT!);
+            const accounts = await this.connection.getParsedTokenAccountsByOwner(wallet, { mint: xpMintKey });
+
+            if (accounts.value.length === 0) return 0;
+            return accounts.value[0].account.data.parsed.info.tokenAmount.uiAmount || 0;
+
+        } catch (error) {
+            console.error("Failed to fetch XP balance:", error);
+            return 0;
+        }
     }
 }

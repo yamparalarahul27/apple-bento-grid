@@ -13,6 +13,7 @@ interface Lesson {
     title: string;
     type: "video" | "reading" | "challenge";
     duration: string;
+    slug: string;
 }
 
 export interface Module {
@@ -57,7 +58,7 @@ export function ModuleList({ modules, courseSlug }: ModuleListProps) {
                                 {module.lessons.map((lesson) => (
                                     <Link
                                         key={lesson.id}
-                                        href={`/courses/${courseSlug}/lessons/${lesson.id}`}
+                                        href={`/courses/${courseSlug}/lessons/${lesson.slug}`}
                                         className="flex items-center justify-between px-6 py-4 hover:bg-surface-2/30 transition-colors group"
                                     >
                                         <div className="flex items-center gap-3">
