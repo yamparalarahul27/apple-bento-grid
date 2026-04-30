@@ -6,6 +6,11 @@ import jwt from "jsonwebtoken";
 // Prevent this route from being statically cached
 export const dynamic = 'force-dynamic';
 
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    throw new Error('Missing required environment variable: JWT_SECRET');
+}
+
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
@@ -19,7 +24,7 @@ export async function POST(req: NextRequest) {
         const token = authHeader.split(' ')[1];
         let decoded: string | jwt.JwtPayload;
         try {
-            decoded = jwt.verify(token, process.env.JWT_SECRET || 'superteam-academy-secret-change-me');
+            decoded = jwt.verify(token, JWT_SECRET);
             console.log(`Authenticated request from user: ${typeof decoded === 'string' ? decoded : decoded.sub}`);
         } catch {
             return NextResponse.json({ error: "Invalid token" }, { status: 401 });
