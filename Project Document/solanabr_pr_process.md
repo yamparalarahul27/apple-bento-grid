@@ -3,9 +3,8 @@
 This document outlines the workflow for developing in a private repository and eventually merging your work into the main [solanabr/superteam-academy](https://github.com/solanabr/superteam-academy) repository.
 
 ## Current Phase: Private Development
-To protect your configurations, deployment details, and experimental code, we are using a separate **private** repository for the `superteam-academy` program part.
+To protect your configurations, deployment details, and experimental code, use a separate **private** repository for the `superteam-academy` program part.
 
-- **Private Repo**: [REMOVED](https://github.com/yamparalarahul27/REMOVED.git)
 - **Purpose**: Stable development, on-chain testing, and keeping private keys (`wallets/`) secure.
 
 ---
