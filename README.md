@@ -1,47 +1,34 @@
-# Superteam Brazil Academy
+# Apple Bento Grid
 
-Welcome to **Superteam Brazil Academy**, an on-chain education platform designed to onboard and certify builders in the Solana ecosystem. This repository contains the complete frontend and on-chain program code.
+A Next.js and Shadcn UI app for creating Apple event style bento grid compositions.
 
----
+## What It Does
 
-## 🚀 Project Overview
+- Uses a fixed 12 column by 6 row canvas based on the provided 1512 x 945 Apple bento references.
+- Includes presets for AirPods, OS overview, and hardware launch layouts.
+- Lets you edit tile content, type, icon, color, image, spans, radius, gap, and stage tone.
+- Supports local image upload, reference-image assignment, PNG export, and JSON export/import.
+- Keeps a cell budget visible so layouts stay constrained instead of becoming freeform collages.
 
-Superteam Brazil Academy provides a gamified learning experience where users:
-- **Enroll** in developer tracks and courses.
-- **Earn XP** for completing lessons and achievements.
-- **Receive Certification** in the form of Soulbound (non-transferable) NFTs powered by **Metaplex Core**.
-- **Build Reputation** through a transparent, on-chain curriculum.
+## Run Locally
 
-## 🏗️ Architecture
+```bash
+npm install
+npm run dev
+```
 
-The system consists of three main parts:
-1.  **Frontend**: A modern, high-performance Next.js web application.
-2.  **On-Chain Program**: An Anchor-based Solana program managing enrollments, XP, and credentials.
-3.  **Backend Signer**: A secure service that co-signs transactions to verify lesson completions (anti-cheat).
+Open [http://localhost:3000](http://localhost:3000).
 
-Refer to [ARCHITECTURE.md](web/Project Document/ARCHITECTURE.md) for a detailed technical breakdown.
+## Checks
 
-## 📂 Repository Structure
+```bash
+npm run lint
+npm run build
+```
 
-- `/web`: The Next.js frontend application.
-- `/superteam-academy`: The Solana on-chain program (Anchor workspace).
-- `/web/Project Document`: Technical specifications, integration guides, and deployment manuals.
+## Key Files
 
-## 🛠️ Getting Started
-
-### Prerequisites
-- Node.js 18+
-- Solana CLI & Anchor CLI (for program development)
-- Rust (for program development)
-
-### Frontend Setup
-1. Move to the web directory: `cd web`
-2. Install dependencies: `npm install`
-3. Configure your environment: `cp .env.example .env.local`
-4. Run locally: `npm run dev`
-
-### Program Setup
-Refer to the [DEPLOY-PROGRAM.md](web/Project Document/DEPLOY-PROGRAM.md) for detailed instructions on building and deploying your own instance to Devnet.
-
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](web/LICENSE) file for details.
+- `src/components/bento-builder.tsx` - editor UI, canvas renderer, export/import behavior.
+- `src/lib/bento-presets.ts` - bento model, preset layouts, grid constants, reference image list.
+- `src/app/globals.css` - Shadcn theme tokens and bento-specific visual styling.
+- `public/references` - numbered copies of the provided Apple bento screenshots.
