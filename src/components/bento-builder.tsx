@@ -527,7 +527,7 @@ export function BentoBuilder() {
                     type="button"
                     onClick={() => applyPreset(preset.id)}
                     className={cn(
-                      "w-full rounded-lg border p-3 text-left transition hover:bg-black/[0.03]",
+                      "w-full rounded-lg border p-3 text-left transition-[transform,background-color,border-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-black/[0.03] active:scale-[0.98]",
                       activePreset === preset.id ? "border-black bg-black text-white" : "border-black/10 bg-white"
                     )}
                   >
@@ -557,7 +557,7 @@ export function BentoBuilder() {
                       key={src}
                       type="button"
                       onClick={() => applyReferenceImage(src)}
-                      className="aspect-[16/10] overflow-hidden rounded-lg border border-black/10 bg-cover bg-center transition hover:scale-[1.02]"
+                      className="aspect-[16/10] overflow-hidden rounded-lg border border-black/10 bg-cover bg-center transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:scale-[1.03] active:scale-[0.98]"
                       style={{ backgroundImage: `url(${src})` }}
                       aria-label={`Reference ${index + 1}`}
                     />
@@ -593,7 +593,7 @@ export function BentoBuilder() {
                       type="button"
                       onClick={() => setSelectedTileId(tile.id)}
                       className={cn(
-                        "flex w-full items-center gap-3 rounded-lg border p-2 text-left transition hover:bg-black/[0.03]",
+                        "flex w-full items-center gap-3 rounded-lg border p-2 text-left transition-[transform,background-color,border-color] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-black/[0.03] active:scale-[0.98]",
                         selectedTile?.id === tile.id ? "border-black bg-black text-white" : "border-black/10 bg-white"
                       )}
                     >
@@ -622,12 +622,15 @@ export function BentoBuilder() {
         <section className="min-w-0 rounded-lg border border-black/10 bg-white shadow-sm">
           <div className="flex flex-col gap-3 border-b border-black/10 p-3 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-wrap items-center gap-2">
-              <Badge variant={usedCells > GRID_CAPACITY ? "destructive" : "secondary"}>
+              <Badge
+                variant={usedCells > GRID_CAPACITY ? "destructive" : "secondary"}
+                className="tabular-nums"
+              >
                 {usedCells} / {GRID_CAPACITY} cells
               </Badge>
               <Badge variant="outline">{GRID_COLUMNS} columns</Badge>
               <Badge variant="outline">{GRID_ROWS} rows</Badge>
-              <Badge variant="outline">{usedPercent}% used</Badge>
+              <Badge variant="outline" className="tabular-nums">{usedPercent}% used</Badge>
             </div>
             <div className="flex items-center gap-2 text-xs text-black/55">
               <Monitor className="size-4" />
@@ -643,12 +646,14 @@ export function BentoBuilder() {
               style={{
                 background: activeStage.background,
                 color: activeStage.text,
+                // Concentric radius: outer = inner tile radius + canvas padding.
+                borderRadius: `${project.radius + 20}px`,
               }}
             >
               {(project.eventName || project.subtitle) && (
                 <div className="mb-4 shrink-0">
                   {project.eventName && (
-                    <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                    <h1 className="text-2xl font-bold leading-tight tracking-tight text-balance sm:text-3xl">
                       {project.eventName}
                     </h1>
                   )}
@@ -902,7 +907,7 @@ export function BentoBuilder() {
                             key={src}
                             type="button"
                             onClick={() => applyReferenceImage(src)}
-                            className="aspect-[16/10] rounded-md border border-black/10 bg-cover bg-center transition hover:scale-[1.02]"
+                            className="aspect-[16/10] rounded-md border border-black/10 bg-cover bg-center transition-transform duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:scale-[1.03] active:scale-[0.98]"
                             style={{ backgroundImage: `url(${src})` }}
                             aria-label={`Reference ${index + 1}`}
                           />
@@ -944,7 +949,7 @@ function BentoTileView({
       type="button"
       onClick={onSelect}
       className={cn(
-        "group relative min-h-0 overflow-hidden border text-left shadow-[0_8px_24px_rgba(0,0,0,0.04)] transition duration-200 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black/25",
+        "group relative min-h-0 overflow-hidden border text-left shadow-[0_8px_24px_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black/25",
         selected && "ring-3 ring-black/30"
       )}
       style={
@@ -1181,7 +1186,7 @@ function RangeField({
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <Label>{label}</Label>
-        <Badge variant="outline">{value}</Badge>
+        <Badge variant="outline" className="tabular-nums">{value}</Badge>
       </div>
       <Slider
         value={[value]}
