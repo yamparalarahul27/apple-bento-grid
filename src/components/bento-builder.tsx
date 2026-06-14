@@ -4,9 +4,10 @@ import { type ComponentProps, type CSSProperties, useEffect, useMemo, useRef, us
 import { toPng } from "html-to-image";
 import {
   Activity,
+  ArrowDown,
+  ArrowUp,
   Battery,
   Camera,
-  Check,
   Copy,
   Cpu,
   Download,
@@ -25,7 +26,6 @@ import {
   Plus,
   RefreshCcw,
   Satellite,
-  Settings2,
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
@@ -236,7 +236,10 @@ export function BentoBuilder() {
   const [selectedTileId, setSelectedTileId] = useState(project.tiles[0]?.id ?? "");
   const [isExporting, setIsExporting] = useState(false);
   const [notice, setNotice] = useState("Ready");
-  const [viewportWidth, setViewportWidth] = useState(0);
+  // Default to a desktop width so the first paint (and SSR markup) shows the
+  // full three-pane editor instead of flashing a single column before the
+  // resize effect runs.
+  const [viewportWidth, setViewportWidth] = useState(1280);
   const canvasRef = useRef<HTMLDivElement>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const jsonInputRef = useRef<HTMLInputElement>(null);
@@ -253,13 +256,13 @@ export function BentoBuilder() {
   const usedPercent = Math.round((usedCells / GRID_CAPACITY) * 100);
   const activeStage = stagePalette[project.stage];
   const shellGridTemplate =
-    viewportWidth >= 1536
-      ? "300px minmax(0, 1fr) 360px"
-      : viewportWidth >= 1024
-        ? "280px minmax(0, 1fr)"
+    viewportWidth >= 1280
+      ? "280px minmax(0, 1fr) 340px"
+      : viewportWidth >= 880
+        ? "260px minmax(0, 1fr)"
         : "minmax(0, 1fr)";
   const inspectorGridColumn =
-    viewportWidth >= 1024 && viewportWidth < 1536 ? "1 / -1" : "auto";
+    viewportWidth >= 880 && viewportWidth < 1280 ? "1 / -1" : "auto";
 
   useEffect(() => {
     function updateViewportWidth() {
@@ -456,12 +459,14 @@ export function BentoBuilder() {
           <div className="flex min-w-0 flex-1 items-center gap-2 lg:max-w-xl">
             <Input
               aria-label="Event name"
+              placeholder="Event name"
               value={project.eventName}
               onChange={(event) => setProjectPatch({ eventName: event.target.value })}
-              className="h-9 min-w-0 bg-white"
+              className="h-9 min-w-0 bg-white font-medium"
             />
             <Input
               aria-label="Subtitle"
+              placeholder="Subtitle"
               value={project.subtitle}
               onChange={(event) => setProjectPatch({ subtitle: event.target.value })}
               className="hidden h-9 min-w-0 bg-white md:block"
@@ -543,7 +548,7 @@ export function BentoBuilder() {
 
               <div>
                 <div className="mb-3 flex items-center justify-between">
-                  <Label className="text-xs uppercase text-black/48">References</Label>
+                  <Label className="text-xs font-semibold uppercase tracking-wide text-black/60">References</Label>
                   <Badge variant="outline">{referenceImages.length}</Badge>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -630,35 +635,55 @@ export function BentoBuilder() {
             </div>
           </div>
 
-          <div className="overflow-x-auto p-4">
+          <div className="overflow-x-auto p-3 sm:p-4">
             <div
               ref={canvasRef}
               data-testid="bento-canvas"
-              className={cn(
-                "relative mx-auto grid aspect-[16/10] w-full min-w-[820px] max-w-[1180px] overflow-hidden p-3 shadow-[0_28px_80px_rgba(0,0,0,0.16)]",
-                project.showGuides && "bento-guide"
-              )}
-              style={
-                {
-                  background: activeStage.background,
-                  color: activeStage.text,
-                  gap: `${project.gap}px`,
-                  gridTemplateColumns: `repeat(${GRID_COLUMNS}, minmax(0, 1fr))`,
-                  gridTemplateRows: `repeat(${GRID_ROWS}, minmax(0, 1fr))`,
-                  gridAutoFlow: "row dense",
-                  "--guide-gap": `${project.gap}px`,
-                } as CSSProperties
-              }
+              className="relative mx-auto flex aspect-[16/10] w-full min-w-[560px] max-w-[1180px] flex-col overflow-hidden p-4 shadow-[0_28px_80px_rgba(0,0,0,0.16)] sm:p-5"
+              style={{
+                background: activeStage.background,
+                color: activeStage.text,
+              }}
             >
-              {project.tiles.map((tile) => (
-                <BentoTileView
-                  key={tile.id}
-                  tile={tile}
-                  project={project}
-                  selected={selectedTile?.id === tile.id}
-                  onSelect={() => setSelectedTileId(tile.id)}
-                />
-              ))}
+              {(project.eventName || project.subtitle) && (
+                <div className="mb-4 shrink-0">
+                  {project.eventName && (
+                    <h1 className="text-2xl font-bold leading-tight tracking-tight sm:text-3xl">
+                      {project.eventName}
+                    </h1>
+                  )}
+                  {project.subtitle && (
+                    <p className="mt-1 text-sm font-medium opacity-60 sm:text-base">
+                      {project.subtitle}
+                    </p>
+                  )}
+                </div>
+              )}
+              <div
+                className={cn(
+                  "relative grid min-h-0 flex-1",
+                  project.showGuides && "bento-guide"
+                )}
+                style={
+                  {
+                    gap: `${project.gap}px`,
+                    gridTemplateColumns: `repeat(${GRID_COLUMNS}, minmax(0, 1fr))`,
+                    gridTemplateRows: `repeat(${GRID_ROWS}, minmax(0, 1fr))`,
+                    gridAutoFlow: "row dense",
+                    "--guide-gap": `${project.gap}px`,
+                  } as CSSProperties
+                }
+              >
+                {project.tiles.map((tile) => (
+                  <BentoTileView
+                    key={tile.id}
+                    tile={tile}
+                    project={project}
+                    selected={selectedTile?.id === tile.id}
+                    onSelect={() => setSelectedTileId(tile.id)}
+                  />
+                ))}
+              </div>
             </div>
           </div>
         </section>
@@ -852,10 +877,16 @@ export function BentoBuilder() {
                       <button
                         key={color}
                         type="button"
-                        className="h-9 rounded-lg border border-black/10"
+                        className={cn(
+                          "h-9 rounded-lg border border-black/10 transition",
+                          selectedTile.accent.toLowerCase() === color
+                            ? "ring-2 ring-black ring-offset-2"
+                            : "hover:scale-[1.05]"
+                        )}
                         style={{ backgroundColor: color }}
                         onClick={() => updateSelected({ accent: color })}
                         aria-label={color}
+                        aria-pressed={selectedTile.accent.toLowerCase() === color}
                       />
                     ))}
                   </div>
@@ -1188,12 +1219,12 @@ function TileActions({
         Delete
       </Button>
       <Button type="button" variant="outline" onClick={() => moveTile(tile.id, -1)}>
-        <Check />
-        Earlier
+        <ArrowUp />
+        Move up
       </Button>
       <Button type="button" variant="outline" onClick={() => moveTile(tile.id, 1)}>
-        <Settings2 />
-        Later
+        <ArrowDown />
+        Move down
       </Button>
     </div>
   );

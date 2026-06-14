@@ -150,7 +150,7 @@ export const presets: BentoPreset[] = [
         makeTile({
           id: "airpods-hero",
           kind: "product",
-          title: "AirPods Pro",
+          title: "Adaptive Audio",
           kicker: "Audio",
           body: "Next generation adaptive sound",
           colSpan: 5,
@@ -370,7 +370,7 @@ export const presets: BentoPreset[] = [
         makeTile({
           id: "ios-hero",
           kind: "headline",
-          title: "iOS",
+          title: "Made for you",
           colSpan: 5,
           rowSpan: 2,
           tone: "blue",
@@ -460,7 +460,7 @@ export const presets: BentoPreset[] = [
         makeTile({
           id: "mac-hero",
           kind: "product",
-          title: "MacBook Pro",
+          title: "Supercharged by M4",
           kicker: "Built for Apple Intelligence",
           body: "A dramatic performance leap",
           colSpan: 6,
