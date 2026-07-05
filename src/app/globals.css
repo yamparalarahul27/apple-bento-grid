@@ -159,25 +159,29 @@
   background-size: calc(100% / 12) calc(100% / 6);
 }
 
+/* Tile type is authored against an 1180px-wide canvas; cqw scaling keeps the
+   composition identical at any preview width instead of clipping. */
 .tile-kicker,
 .tile-title,
 .tile-body {
   max-width: 100%;
   letter-spacing: 0;
-  overflow-wrap: anywhere;
+  /* Only break words that genuinely overflow — `anywhere` splits words
+     mid-syllable in narrow tiles. */
+  overflow-wrap: break-word;
 }
 
 .tile-kicker {
   margin-bottom: 0.35rem;
   color: var(--tile-muted);
-  font-size: 0.82rem;
+  font-size: calc(13.1 * 100cqw / 1180);
   font-weight: 700;
   line-height: 1.1;
 }
 
 .tile-title {
   color: currentColor;
-  font-size: var(--tile-title);
+  font-size: calc(var(--tile-title, 21) * 100cqw / 1180);
   font-weight: 760;
   line-height: 0.98;
   text-wrap: balance;
@@ -195,7 +199,7 @@
 .tile-body {
   margin-top: 0.55rem;
   color: var(--tile-muted);
-  font-size: var(--tile-body, 1rem);
+  font-size: calc(var(--tile-body, 16) * 100cqw / 1180);
   font-weight: 650;
   line-height: 1.16;
   text-wrap: pretty;
@@ -210,6 +214,9 @@
 
 .safe-tile-text .tile-title {
   -webkit-line-clamp: 3;
+  /* Clamp sets overflow:hidden, which lets flex squash the title to 0 height
+     in short tiles — keep the title and let the body give way instead. */
+  flex-shrink: 0;
 }
 
 .safe-tile-text .tile-body {
@@ -268,7 +275,7 @@
 
 .icon-medallion {
   display: flex;
-  width: min(62px, 48%);
+  width: min(calc(62 * 100cqw / 1180), 48%);
   aspect-ratio: 1;
   align-items: center;
   justify-content: center;
@@ -286,7 +293,7 @@
 }
 
 .icon-medallion-small {
-  width: min(42px, 42%);
+  width: min(calc(42 * 100cqw / 1180), 42%);
 }
 
 .feature-chip {
@@ -299,14 +306,14 @@
   background: color-mix(in srgb, var(--tile-accent) 18%, white);
   color: color-mix(in srgb, var(--tile-accent) 70%, black);
   padding: 0.34rem 0.72rem;
-  font-size: 0.86rem;
+  font-size: calc(13.8 * 100cqw / 1180);
   font-weight: 760;
   line-height: 1;
 }
 
 .feature-chip svg {
-  width: 1rem;
-  height: 1rem;
+  width: calc(16 * 100cqw / 1180);
+  height: calc(16 * 100cqw / 1180);
 }
 
 .abstract-image {

@@ -18,6 +18,7 @@ import {
   ImageIcon,
   Images,
   Languages,
+  Loader2,
   LockKeyhole,
   Map,
   MessageCircle,
@@ -235,7 +236,8 @@ export function BentoBuilder() {
   const [project, setProject] = useState<BentoProject>(() => cloneProject(presets[0].project));
   const [selectedTileId, setSelectedTileId] = useState(project.tiles[0]?.id ?? "");
   const [isExporting, setIsExporting] = useState(false);
-  const [notice, setNotice] = useState("Ready");
+  // key lets repeated identical messages restart the auto-dismiss timer.
+  const [notice, setNotice] = useState({ text: "Ready", key: 0 });
   // Default to a desktop width so the first paint (and SSR markup) shows the
   // full three-pane editor instead of flashing a single column before the
   // resize effect runs.
@@ -248,6 +250,11 @@ export function BentoBuilder() {
     () => project.tiles.find((tile) => tile.id === selectedTileId) ?? project.tiles[0],
     [project.tiles, selectedTileId]
   );
+  const selectedIndex = project.tiles.findIndex((tile) => tile.id === selectedTile?.id);
+
+  function announce(text: string) {
+    setNotice((current) => ({ text, key: current.key + 1 }));
+  }
 
   const usedCells = useMemo(
     () => project.tiles.reduce((total, tile) => total + tile.colSpan * tile.rowSpan, 0),
@@ -273,6 +280,14 @@ export function BentoBuilder() {
     window.addEventListener("resize", updateViewportWidth);
     return () => window.removeEventListener("resize", updateViewportWidth);
   }, []);
+
+  useEffect(() => {
+    if (notice.text === "Ready") return;
+    const timer = setTimeout(() => {
+      setNotice((current) => ({ ...current, text: "Ready" }));
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, [notice]);
 
   function setProjectPatch(patch: Partial<BentoProject>) {
     setProject((current) => ({ ...current, ...patch }));
@@ -307,7 +322,7 @@ export function BentoBuilder() {
     setActivePreset(preset.id);
     setProject(nextProject);
     setSelectedTileId(nextProject.tiles[0]?.id ?? "");
-    setNotice(`${preset.name} loaded`);
+    announce(`${preset.name} loaded`);
   }
 
   function addTile(kind: TileKind = "feature") {
@@ -323,14 +338,14 @@ export function BentoBuilder() {
       tiles: [...current.tiles, tile],
     }));
     setSelectedTileId(tile.id);
-    setNotice("Tile added");
+    announce("Tile added");
   }
 
   function duplicateTile(tile: BentoTile) {
     const duplicate = {
       ...tile,
       id: makeId("copy"),
-      title: `${tile.title} copy`,
+      title: tile.title.endsWith(" copy") ? tile.title : `${tile.title} copy`,
     };
 
     setProject((current) => ({
@@ -338,17 +353,18 @@ export function BentoBuilder() {
       tiles: [...current.tiles, duplicate],
     }));
     setSelectedTileId(duplicate.id);
-    setNotice("Tile duplicated");
+    announce("Tile duplicated");
   }
 
   function deleteTile(tileId: string) {
-    setProject((current) => {
-      const nextTiles = current.tiles.filter((tile) => tile.id !== tileId);
-      const safeTiles = nextTiles.length > 0 ? nextTiles : [{ ...emptyTile, id: makeId("tile") }];
-      setSelectedTileId(safeTiles[0].id);
-      return { ...current, tiles: safeTiles };
-    });
-    setNotice("Tile removed");
+    const index = project.tiles.findIndex((tile) => tile.id === tileId);
+    const nextTiles = project.tiles.filter((tile) => tile.id !== tileId);
+    if (index < 0 || nextTiles.length === 0) return;
+
+    const neighbor = nextTiles[Math.min(index, nextTiles.length - 1)];
+    setProject((current) => ({ ...current, tiles: nextTiles }));
+    if (selectedTileId === tileId) setSelectedTileId(neighbor.id);
+    announce("Tile removed");
   }
 
   function moveTile(tileId: string, direction: -1 | 1) {
@@ -368,7 +384,7 @@ export function BentoBuilder() {
     if (!canvasRef.current) return;
 
     setIsExporting(true);
-    setNotice("Rendering PNG");
+    announce("Rendering PNG");
     try {
       const dataUrl = await toPng(canvasRef.current, {
         cacheBust: true,
@@ -379,9 +395,9 @@ export function BentoBuilder() {
       anchor.href = dataUrl;
       anchor.download = `${slugify(project.eventName) || "bento"}-grid.png`;
       anchor.click();
-      setNotice("PNG exported");
+      announce("PNG exported");
     } catch {
-      setNotice("PNG export failed");
+      announce("PNG export failed");
     } finally {
       setIsExporting(false);
     }
@@ -393,7 +409,7 @@ export function BentoBuilder() {
       JSON.stringify(project, null, 2),
       "application/json"
     );
-    setNotice("JSON exported");
+    announce("JSON exported");
   }
 
   async function importJson(file: File | undefined) {
@@ -406,9 +422,9 @@ export function BentoBuilder() {
       setProject(nextProject);
       setActivePreset("custom");
       setSelectedTileId(nextProject.tiles[0]?.id ?? "");
-      setNotice("JSON imported");
+      announce("JSON imported");
     } catch {
-      setNotice("Could not import JSON");
+      announce("Could not import JSON");
     } finally {
       if (jsonInputRef.current) jsonInputRef.current.value = "";
     }
@@ -424,7 +440,7 @@ export function BentoBuilder() {
         imageUrl: String(reader.result),
         imageFit: "cover",
       });
-      setNotice("Image added");
+      announce("Image added");
     };
     reader.readAsDataURL(file);
     if (imageInputRef.current) imageInputRef.current.value = "";
@@ -439,7 +455,7 @@ export function BentoBuilder() {
       imageFit: "cover",
       title: selectedTile.title || "Reference tile",
     });
-    setNotice("Reference applied");
+    announce("Reference applied");
   }
 
   return (
@@ -452,11 +468,13 @@ export function BentoBuilder() {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold">Bento Lab</p>
-              <p className="truncate text-xs text-black/55">{notice}</p>
+              <p role="status" aria-live="polite" className="truncate text-xs text-black/55">
+                {notice.text}
+              </p>
             </div>
           </div>
 
-          <div className="flex min-w-0 flex-1 items-center gap-2 lg:max-w-xl">
+          <div className="flex min-w-0 flex-1 flex-col gap-2 sm:flex-row sm:items-center lg:max-w-xl">
             <Input
               aria-label="Event name"
               placeholder="Event name"
@@ -469,7 +487,7 @@ export function BentoBuilder() {
               placeholder="Subtitle"
               value={project.subtitle}
               onChange={(event) => setProjectPatch({ subtitle: event.target.value })}
-              className="hidden h-9 min-w-0 bg-white md:block"
+              className="h-9 min-w-0 bg-white"
             />
           </div>
 
@@ -478,7 +496,7 @@ export function BentoBuilder() {
               <Plus />
             </TooltipButton>
             <TooltipButton label="Export PNG" onClick={exportPng} disabled={isExporting}>
-              <Download />
+              {isExporting ? <Loader2 className="animate-spin" /> : <Download />}
             </TooltipButton>
             <TooltipButton label="Export JSON" onClick={exportJson}>
               <FileJson />
@@ -547,10 +565,11 @@ export function BentoBuilder() {
               <Separator className="my-4" />
 
               <div>
-                <div className="mb-3 flex items-center justify-between">
+                <div className="mb-1 flex items-center justify-between">
                   <Label className="text-xs font-semibold uppercase tracking-wide text-black/60">References</Label>
                   <Badge variant="outline">{referenceImages.length}</Badge>
                 </div>
+                <p className="mb-3 text-xs text-black/50">Click one to fill the selected tile.</p>
                 <div className="grid grid-cols-2 gap-2">
                   {referenceImages.slice(0, 8).map((src, index) => (
                     <button
@@ -585,7 +604,7 @@ export function BentoBuilder() {
                 </div>
               </div>
 
-              <ScrollArea className="h-[620px]">
+              <ScrollArea className="h-[clamp(280px,62vh,620px)]">
                 <div className="space-y-2 p-3">
                   {project.tiles.map((tile, index) => (
                     <button
@@ -601,7 +620,14 @@ export function BentoBuilder() {
                         {index + 1}
                       </span>
                       <span className="min-w-0 flex-1">
-                        <span className="block truncate text-sm font-medium">{tile.title}</span>
+                        <span
+                          className={cn(
+                            "block truncate text-sm font-medium",
+                            !tile.title.trim() && (selectedTile?.id === tile.id ? "text-white/50" : "text-black/40")
+                          )}
+                        >
+                          {tile.title.trim() || "Untitled tile"}
+                        </span>
                         <span
                           className={cn(
                             "block text-xs",
@@ -620,22 +646,30 @@ export function BentoBuilder() {
         </aside>
 
         <section className="min-w-0 rounded-lg border border-black/10 bg-white shadow-sm">
-          <div className="flex flex-col gap-3 border-b border-black/10 p-3 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex flex-wrap items-center gap-2">
-              <Badge
-                variant={usedCells > GRID_CAPACITY ? "destructive" : "secondary"}
-                className="tabular-nums"
-              >
-                {usedCells} / {GRID_CAPACITY} cells
-              </Badge>
-              <Badge variant="outline">{GRID_COLUMNS} columns</Badge>
-              <Badge variant="outline">{GRID_ROWS} rows</Badge>
-              <Badge variant="outline" className="tabular-nums">{usedPercent}% used</Badge>
+          <div className="border-b border-black/10 p-3">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  variant={usedCells > GRID_CAPACITY ? "destructive" : "secondary"}
+                  className="tabular-nums"
+                >
+                  {usedCells} / {GRID_CAPACITY} cells
+                </Badge>
+                <Badge variant="outline">{GRID_COLUMNS} columns</Badge>
+                <Badge variant="outline">{GRID_ROWS} rows</Badge>
+                <Badge variant="outline" className="tabular-nums">{usedPercent}% used</Badge>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-black/55">
+                <Monitor className="size-4" />
+                1512 x 945 reference ratio
+              </div>
             </div>
-            <div className="flex items-center gap-2 text-xs text-black/55">
-              <Monitor className="size-4" />
-              1512 x 945 reference ratio
-            </div>
+            {usedCells > GRID_CAPACITY && (
+              <p className="mt-2 text-xs font-medium text-red-600">
+                Over capacity by {usedCells - GRID_CAPACITY} {usedCells - GRID_CAPACITY === 1 ? "cell" : "cells"} — shrink
+                or remove tiles so everything fits the {GRID_COLUMNS} x {GRID_ROWS} frame.
+              </p>
+            )}
           </div>
 
           <div className="overflow-x-auto p-3 sm:p-4">
@@ -648,6 +682,9 @@ export function BentoBuilder() {
                 color: activeStage.text,
                 // Concentric radius: outer = inner tile radius + canvas padding.
                 borderRadius: `${project.radius + 20}px`,
+                // Tile typography is authored against an 1180px canvas and
+                // scaled with cqw so text never clips at narrower widths.
+                containerType: "inline-size",
               }}
             >
               {(project.eventName || project.subtitle) && (
@@ -771,6 +808,8 @@ export function BentoBuilder() {
 
                   <TileActions
                     tile={selectedTile}
+                    index={selectedIndex}
+                    count={project.tiles.length}
                     duplicateTile={duplicateTile}
                     deleteTile={deleteTile}
                     moveTile={moveTile}
@@ -783,6 +822,7 @@ export function BentoBuilder() {
                     value={selectedTile.colSpan}
                     min={1}
                     max={GRID_COLUMNS}
+                    unit={` / ${GRID_COLUMNS}`}
                     onChange={(value) => updateSelected({ colSpan: value })}
                   />
                   <RangeField
@@ -790,6 +830,7 @@ export function BentoBuilder() {
                     value={selectedTile.rowSpan}
                     min={1}
                     max={GRID_ROWS}
+                    unit={` / ${GRID_ROWS}`}
                     onChange={(value) => updateSelected({ rowSpan: value })}
                   />
                   <RangeField
@@ -797,6 +838,7 @@ export function BentoBuilder() {
                     value={Math.round(selectedTile.scale * 100)}
                     min={60}
                     max={140}
+                    unit="%"
                     onChange={(value) => updateSelected({ scale: value / 100 })}
                   />
                   <SelectField
@@ -817,6 +859,7 @@ export function BentoBuilder() {
                     value={project.gap}
                     min={6}
                     max={24}
+                    unit="px"
                     onChange={(value) => setProjectPatch({ gap: value })}
                   />
                   <RangeField
@@ -824,19 +867,28 @@ export function BentoBuilder() {
                     value={project.radius}
                     min={10}
                     max={34}
+                    unit="px"
                     onChange={(value) => setProjectPatch({ radius: value })}
                   />
 
-                  <div className="flex items-center justify-between rounded-lg border border-black/10 p-3">
-                    <Label htmlFor="guides">Guides</Label>
+                  <div className="flex items-center justify-between gap-3 rounded-lg border border-black/10 p-3">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="guides">Guides</Label>
+                      <p className="text-xs text-black/50">
+                        Overlay the {GRID_COLUMNS} x {GRID_ROWS} grid on the canvas
+                      </p>
+                    </div>
                     <Switch
                       id="guides"
                       checked={project.showGuides}
                       onCheckedChange={(checked) => setProjectPatch({ showGuides: checked })}
                     />
                   </div>
-                  <div className="flex items-center justify-between rounded-lg border border-black/10 p-3">
-                    <Label htmlFor="safe-text">Safe text</Label>
+                  <div className="flex items-center justify-between gap-3 rounded-lg border border-black/10 p-3">
+                    <div className="space-y-0.5">
+                      <Label htmlFor="safe-text">Safe text</Label>
+                      <p className="text-xs text-black/50">Clamp long titles and body copy so they fit</p>
+                    </div>
                     <Switch
                       id="safe-text"
                       checked={project.safeText}
@@ -866,11 +918,13 @@ export function BentoBuilder() {
                     <div className="flex gap-2">
                       <Input
                         type="color"
+                        aria-label="Accent color picker"
                         value={selectedTile.accent}
                         onChange={(event) => updateSelected({ accent: event.target.value })}
                         className="h-9 w-12 p-1"
                       />
                       <Input
+                        aria-label="Accent hex value"
                         value={selectedTile.accent}
                         onChange={(event) => updateSelected({ accent: event.target.value })}
                       />
@@ -900,6 +954,7 @@ export function BentoBuilder() {
 
                   <div className="space-y-2">
                     <Label>Reference set</Label>
+                    <p className="text-xs text-black/50">Click one to fill the selected tile.</p>
                     <ScrollArea className="h-[260px] rounded-lg border border-black/10 p-2">
                       <div className="grid grid-cols-2 gap-2">
                         {referenceImages.map((src, index) => (
@@ -967,14 +1022,15 @@ function BentoTileView({
           color: palette.text,
           "--tile-accent": tile.accent,
           "--tile-muted": palette.muted,
-          "--tile-title": `${titleSize}px`,
-          "--tile-body": `${bodySize}px`,
+          // Unitless: CSS multiplies by 100cqw / 1180 to scale with the canvas.
+          "--tile-title": String(titleSize),
+          "--tile-body": String(bodySize),
         } as CSSProperties
       }
     >
       <div
         className={cn(
-          "relative z-10 flex h-full min-h-0 flex-col overflow-hidden p-5",
+          "relative z-10 flex h-full min-h-0 flex-col overflow-hidden [padding:calc(20*100cqw/1180)]",
           tile.align === "center" && "items-center justify-center text-center",
           tile.align === "start" && "items-start justify-end text-left",
           tile.align === "end" && "items-end justify-end text-right",
@@ -1174,19 +1230,21 @@ function RangeField({
   value,
   min,
   max,
+  unit = "",
   onChange,
 }: {
   label: string;
   value: number;
   min: number;
   max: number;
+  unit?: string;
   onChange: (value: number) => void;
 }) {
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3">
         <Label>{label}</Label>
-        <Badge variant="outline" className="tabular-nums">{value}</Badge>
+        <Badge variant="outline" className="tabular-nums">{value}{unit}</Badge>
       </div>
       <Slider
         value={[value]}
@@ -1204,33 +1262,52 @@ function RangeField({
 
 function TileActions({
   tile,
+  index,
+  count,
   duplicateTile,
   deleteTile,
   moveTile,
 }: {
   tile: BentoTile;
+  index: number;
+  count: number;
   duplicateTile: (tile: BentoTile) => void;
   deleteTile: (tileId: string) => void;
   moveTile: (tileId: string, direction: -1 | 1) => void;
 }) {
   return (
-    <div className="grid grid-cols-2 gap-2">
-      <Button type="button" variant="outline" onClick={() => duplicateTile(tile)}>
-        <Copy />
-        Duplicate
-      </Button>
-      <Button type="button" variant="destructive" onClick={() => deleteTile(tile.id)}>
-        <Trash2 />
-        Delete
-      </Button>
-      <Button type="button" variant="outline" onClick={() => moveTile(tile.id, -1)}>
-        <ArrowUp />
-        Move up
-      </Button>
-      <Button type="button" variant="outline" onClick={() => moveTile(tile.id, 1)}>
-        <ArrowDown />
-        Move down
-      </Button>
+    <div className="space-y-2">
+      <p className="text-xs font-medium text-black/50">
+        Tile {index + 1} of {count}
+      </p>
+      <div className="grid grid-cols-2 gap-2">
+        <Button type="button" variant="outline" onClick={() => duplicateTile(tile)}>
+          <Copy />
+          Duplicate
+        </Button>
+        <Button
+          type="button"
+          variant="destructive"
+          disabled={count <= 1}
+          onClick={() => deleteTile(tile.id)}
+        >
+          <Trash2 />
+          Delete
+        </Button>
+        <Button type="button" variant="outline" disabled={index <= 0} onClick={() => moveTile(tile.id, -1)}>
+          <ArrowUp />
+          Move up
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          disabled={index >= count - 1}
+          onClick={() => moveTile(tile.id, 1)}
+        >
+          <ArrowDown />
+          Move down
+        </Button>
+      </div>
     </div>
   );
 }
