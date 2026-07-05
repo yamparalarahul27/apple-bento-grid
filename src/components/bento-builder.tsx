@@ -1066,17 +1066,16 @@ function TileContent({
   }
 
   if (tile.kind === "product") {
-    // Short tiles have no room for the object — text-only keeps them clean.
-    const showObject = tile.rowSpan > 1;
+    // Short tiles have no room for the placeholder — text-only keeps them clean.
+    const showPlaceholder = tile.rowSpan > 1;
 
     return (
       <div className="flex h-full w-full min-h-0 flex-col items-center justify-center gap-[calc(14*100cqw/1180)]">
-        {showObject && (
-          <div className="flex w-full min-h-0 flex-1 items-center justify-center" aria-hidden="true">
-            <div className="product-object">
-              <span />
-              <span />
-              <Icon className="product-icon" />
+        {showPlaceholder && (
+          <div className="w-full min-h-0 flex-1" aria-hidden="true">
+            <div className="asset-placeholder">
+              <Icon />
+              <span className="asset-placeholder-label">Product</span>
             </div>
           </div>
         )}
@@ -1121,15 +1120,22 @@ function TileContent({
   }
 
   if (tile.kind === "image") {
+    const showPlaceholder = !isImage && tile.rowSpan > 1;
+
     return (
-      <div className={cn("flex h-full w-full flex-col justify-end", isImage && "text-white")}>
-        {!isImage && (
-          <div className="abstract-image" aria-hidden="true">
-            <Icon />
+      <div className={cn("flex h-full w-full min-h-0 flex-col justify-end", isImage && "text-white")}>
+        {showPlaceholder && (
+          <div
+            className="w-full min-h-0 flex-1 [margin-bottom:calc(12*100cqw/1180)]"
+            aria-hidden="true"
+          >
+            <div className="asset-placeholder">
+              <Icon />
+              <span className="asset-placeholder-label">Image</span>
+            </div>
           </div>
         )}
-        {/* Positioned after the blob so the text always paints above it. */}
-        <div className="relative">
+        <div className="shrink-0">
           {kicker && <p className="tile-kicker">{kicker}</p>}
           <h2 className="tile-title compact-title">{tile.title}</h2>
           {body && <p className="tile-body">{body}</p>}
