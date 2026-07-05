@@ -684,7 +684,7 @@ export function BentoBuilder() {
             <div
               ref={canvasRef}
               data-testid="bento-canvas"
-              className="relative mx-auto flex aspect-[16/10] w-full min-w-[560px] max-w-[1180px] flex-col overflow-hidden p-4 shadow-[0_28px_80px_rgba(0,0,0,0.16)] sm:p-5"
+              className="smooth-corners relative mx-auto flex aspect-[16/10] w-full min-w-[560px] max-w-[1180px] flex-col overflow-hidden p-4 shadow-[0_28px_80px_rgba(0,0,0,0.16)] sm:p-5"
               style={{
                 background: activeStage.background,
                 color: activeStage.text,
@@ -1016,7 +1016,7 @@ function BentoTileView({
       type="button"
       onClick={onSelect}
       className={cn(
-        "group relative min-h-0 overflow-hidden border text-left shadow-[0_8px_24px_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black/25",
+        "smooth-corners group relative min-h-0 overflow-hidden border text-left shadow-[0_8px_24px_rgba(0,0,0,0.04)] transition-[transform,box-shadow] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] hover:-translate-y-0.5 hover:shadow-[0_16px_36px_rgba(0,0,0,0.1)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-black/25",
         selected && "ring-3 ring-black/30"
       )}
       style={
@@ -1054,7 +1054,7 @@ function BentoTileView({
       </div>
 
       <div className="pointer-events-none absolute inset-0 opacity-0 transition group-hover:opacity-100">
-        <div className="absolute inset-0 border border-black/15" style={{ borderRadius: `${project.radius}px` }} />
+        <div className="smooth-corners absolute inset-0 border border-black/15" style={{ borderRadius: `${project.radius}px` }} />
       </div>
     </button>
   );
