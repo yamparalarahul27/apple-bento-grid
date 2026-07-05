@@ -50,6 +50,7 @@ import {
   stageOptions,
   tileKindOptions,
   toneOptions,
+  weightOptions,
   type BentoProject,
   type BentoTile,
   type IconKey,
@@ -215,6 +216,7 @@ function normalizeProject(candidate: Partial<BentoProject>): BentoProject {
         id: typeof tile.id === "string" ? tile.id : makeId(`import-${index}`),
         colSpan: clampSpan(Number(tile.colSpan) || emptyTile.colSpan, GRID_COLUMNS),
         rowSpan: clampSpan(Number(tile.rowSpan) || emptyTile.rowSpan, GRID_ROWS),
+        weight: Math.max(300, Math.min(900, Number(tile.weight) || emptyTile.weight)),
       }))
     : fallback.tiles;
 
@@ -670,6 +672,12 @@ export function BentoBuilder() {
                 or remove tiles so everything fits the {GRID_COLUMNS} x {GRID_ROWS} frame.
               </p>
             )}
+            {usedCells < GRID_CAPACITY && (
+              <p className="mt-2 text-xs font-medium text-amber-600">
+                {GRID_CAPACITY - usedCells} empty {GRID_CAPACITY - usedCells === 1 ? "cell" : "cells"} — widen or add
+                tiles so the bento has no gaps.
+              </p>
+            )}
           </div>
 
           <div className="overflow-x-auto p-3 sm:p-4">
@@ -837,16 +845,24 @@ export function BentoBuilder() {
                     unit="%"
                     onChange={(value) => updateSelected({ scale: value / 100 })}
                   />
-                  <SelectField
-                    label="Alignment"
-                    value={selectedTile.align}
-                    options={[
-                      { value: "start", label: "Start" },
-                      { value: "center", label: "Center" },
-                      { value: "end", label: "End" },
-                    ]}
-                    onChange={(value) => updateSelected({ align: value as TileAlign })}
-                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <SelectField
+                      label="Alignment"
+                      value={selectedTile.align}
+                      options={[
+                        { value: "start", label: "Start" },
+                        { value: "center", label: "Center" },
+                        { value: "end", label: "End" },
+                      ]}
+                      onChange={(value) => updateSelected({ align: value as TileAlign })}
+                    />
+                    <SelectField
+                      label="Title weight"
+                      value={String(selectedTile.weight)}
+                      options={weightOptions}
+                      onChange={(value) => updateSelected({ weight: Number(value) })}
+                    />
+                  </div>
 
                   <Separator />
 
@@ -1021,6 +1037,7 @@ function BentoTileView({
           // Unitless: CSS multiplies by 100cqw / 1180 to scale with the canvas.
           "--tile-title": String(titleSize),
           "--tile-body": String(bodySize),
+          "--tile-weight": String(tile.weight),
         } as CSSProperties
       }
     >

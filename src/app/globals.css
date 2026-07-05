@@ -198,7 +198,7 @@
 .tile-title {
   color: currentColor;
   font-size: calc(var(--tile-title, 21) * 100cqw / 1180);
-  font-weight: 760;
+  font-weight: var(--tile-weight, 760);
   line-height: 0.98;
   text-wrap: balance;
 }
