@@ -159,6 +159,22 @@
   background-size: calc(100% / 12) calc(100% / 6);
 }
 
+/* Stage header scales with the canvas like the tiles, so the grid keeps the
+   same share of vertical space at every preview width. */
+.stage-title {
+  font-size: calc(30 * 100cqw / 1180);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.stage-subtitle {
+  margin-top: calc(4 * 100cqw / 1180);
+  font-size: calc(16 * 100cqw / 1180);
+  font-weight: 500;
+  opacity: 0.6;
+}
+
 /* Tile type is authored against an 1180px-wide canvas; cqw scaling keeps the
    composition identical at any preview width instead of clipping. */
 .tile-kicker,
@@ -172,7 +188,7 @@
 }
 
 .tile-kicker {
-  margin-bottom: 0.35rem;
+  margin-bottom: calc(5.6 * 100cqw / 1180);
   color: var(--tile-muted);
   font-size: calc(13.1 * 100cqw / 1180);
   font-weight: 700;
@@ -197,7 +213,7 @@
 }
 
 .tile-body {
-  margin-top: 0.55rem;
+  margin-top: calc(8.8 * 100cqw / 1180);
   color: var(--tile-muted);
   font-size: calc(var(--tile-body, 16) * 100cqw / 1180);
   font-weight: 650;
@@ -230,8 +246,10 @@
 
 .product-object {
   position: relative;
-  width: min(72%, 330px);
-  min-width: 118px;
+  width: min(64%, calc(300 * 100cqw / 1180));
+  /* Never taller than the flex slot the tile gives it — a fixed min-width
+     used to shove the title out of short tiles. */
+  max-height: 100%;
   aspect-ratio: 1.72;
   border-radius: 999px;
   background:
@@ -318,9 +336,12 @@
 
 .abstract-image {
   position: absolute;
-  inset: auto -14% -32% auto;
+  /* Top-right, away from the bottom-anchored text. */
+  inset: -28% -14% auto auto;
   display: flex;
   width: min(220px, 70%);
+  /* Wide-but-short tiles: keep the orb out of the text zone. */
+  max-height: 96%;
   aspect-ratio: 1;
   align-items: center;
   justify-content: center;

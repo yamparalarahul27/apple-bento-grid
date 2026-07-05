@@ -688,16 +688,12 @@ export function BentoBuilder() {
               }}
             >
               {(project.eventName || project.subtitle) && (
-                <div className="mb-4 shrink-0">
+                <div className="shrink-0 [margin-bottom:calc(16*100cqw/1180)]">
                   {project.eventName && (
-                    <h1 className="text-2xl font-bold leading-tight tracking-tight text-balance sm:text-3xl">
-                      {project.eventName}
-                    </h1>
+                    <h1 className="stage-title text-balance">{project.eventName}</h1>
                   )}
                   {project.subtitle && (
-                    <p className="mt-1 text-sm font-medium opacity-60 sm:text-base">
-                      {project.subtitle}
-                    </p>
+                    <p className="stage-subtitle">{project.subtitle}</p>
                   )}
                 </div>
               )}
@@ -1056,48 +1052,69 @@ function TileContent({
   icon: LucideIcon;
   isImage: boolean;
 }) {
+  const kicker = tile.kicker.trim();
+  const body = tile.body.trim();
+
   if (tile.kind === "metric") {
     return (
       <>
-        <p className="tile-kicker">{tile.kicker}</p>
+        {kicker && <p className="tile-kicker">{kicker}</p>}
         <h2 className="tile-title metric-title">{tile.title}</h2>
-        <p className="tile-body">{tile.body}</p>
+        {body && <p className="tile-body">{body}</p>}
       </>
     );
   }
 
   if (tile.kind === "product") {
+    // Short tiles have no room for the object — text-only keeps them clean.
+    const showObject = tile.rowSpan > 1;
+
     return (
-      <div className="flex h-full w-full flex-col items-center justify-center gap-4">
-        <div className="product-object" aria-hidden="true">
-          <span />
-          <span />
-          <Icon className="product-icon" />
-        </div>
-        <div className="max-w-full text-center">
-          <p className="tile-kicker">{tile.kicker}</p>
-          <h2 className="tile-title">{tile.title}</h2>
-          <p className="tile-body">{tile.body}</p>
+      <div className="flex h-full w-full min-h-0 flex-col items-center justify-center gap-[calc(14*100cqw/1180)]">
+        {showObject && (
+          <div className="flex w-full min-h-0 flex-1 items-center justify-center" aria-hidden="true">
+            <div className="product-object">
+              <span />
+              <span />
+              <Icon className="product-icon" />
+            </div>
+          </div>
+        )}
+        <div className="max-w-full shrink-0 text-center">
+          {kicker && <p className="tile-kicker">{kicker}</p>}
+          <h2 className="tile-title compact-title">{tile.title}</h2>
+          {body && <p className="tile-body">{body}</p>}
         </div>
       </div>
     );
   }
 
   if (tile.kind === "icon") {
+    // Single-row tiles lay the medallion beside the text — stacking clips.
+    if (tile.rowSpan <= 1) {
+      return (
+        <div className="flex h-full w-full min-h-0 items-center justify-center gap-[calc(12*100cqw/1180)]">
+          <div className="icon-medallion icon-medallion-small shrink-0">
+            <Icon />
+          </div>
+          <div className="min-w-0 text-left">
+            {kicker && <p className="tile-kicker">{kicker}</p>}
+            <h2 className="tile-title compact-title">{tile.title}</h2>
+            {body && <p className="tile-body">{body}</p>}
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div
-        className={cn(
-          "flex h-full w-full flex-col items-center justify-center",
-          tile.rowSpan <= 1 ? "gap-2" : "gap-4"
-        )}
-      >
-        <div className={cn("icon-medallion", tile.rowSpan <= 1 && "icon-medallion-small")}>
+      <div className="flex h-full w-full min-h-0 flex-col items-center justify-center gap-[calc(14*100cqw/1180)]">
+        <div className="icon-medallion shrink-0">
           <Icon />
         </div>
         <div className="max-w-full text-center">
-          <p className="tile-kicker">{tile.kicker}</p>
+          {kicker && <p className="tile-kicker">{kicker}</p>}
           <h2 className="tile-title compact-title">{tile.title}</h2>
-          <p className="tile-body">{tile.body}</p>
+          {body && <p className="tile-body">{body}</p>}
         </div>
       </div>
     );
@@ -1106,40 +1123,43 @@ function TileContent({
   if (tile.kind === "image") {
     return (
       <div className={cn("flex h-full w-full flex-col justify-end", isImage && "text-white")}>
-        <p className="tile-kicker">{tile.kicker}</p>
-        <h2 className="tile-title compact-title">{tile.title}</h2>
-        <p className="tile-body">{tile.body}</p>
         {!isImage && (
           <div className="abstract-image" aria-hidden="true">
             <Icon />
           </div>
         )}
+        {/* Positioned after the blob so the text always paints above it. */}
+        <div className="relative">
+          {kicker && <p className="tile-kicker">{kicker}</p>}
+          <h2 className="tile-title compact-title">{tile.title}</h2>
+          {body && <p className="tile-body">{body}</p>}
+        </div>
       </div>
     );
   }
 
   if (tile.kind === "feature") {
-    const showChip = Boolean(tile.kicker) || tile.rowSpan > 1;
+    const showChip = Boolean(kicker) || tile.rowSpan > 1;
 
     return (
       <div className={cn("flex h-full w-full flex-col justify-center", tile.rowSpan <= 1 ? "gap-1.5" : "gap-3")}>
         {showChip && (
-          <div className="feature-chip">
+          <div className="feature-chip shrink-0">
             <Icon />
-            {tile.kicker || "Feature"}
+            {kicker || "Feature"}
           </div>
         )}
         <h2 className="tile-title compact-title">{tile.title}</h2>
-        <p className="tile-body">{tile.body}</p>
+        {body && <p className="tile-body">{body}</p>}
       </div>
     );
   }
 
   return (
     <>
-      <p className="tile-kicker">{tile.kicker}</p>
+      {kicker && <p className="tile-kicker">{kicker}</p>}
       <h2 className="tile-title">{tile.title}</h2>
-      <p className="tile-body">{tile.body}</p>
+      {body && <p className="tile-body">{body}</p>}
     </>
   );
 }
@@ -1148,11 +1168,11 @@ function getTitleSize(tile: BentoTile) {
   let base = 21;
 
   if (tile.kind === "metric") {
-    base = tile.rowSpan <= 1 ? 38 : 62;
+    base = tile.rowSpan <= 1 ? 32 : 62;
   } else if (tile.kind === "headline") {
     base = tile.rowSpan >= 3 ? 38 : tile.rowSpan >= 2 ? 32 : 24;
   } else if (tile.kind === "icon") {
-    base = tile.rowSpan <= 1 ? 17 : 21;
+    base = tile.rowSpan <= 1 ? (tile.colSpan <= 2 ? 15 : 17) : 21;
   } else if (tile.kind === "feature") {
     base = tile.rowSpan <= 1 ? 19 : 24;
   } else if (tile.rowSpan >= 3) {
