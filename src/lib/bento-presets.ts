@@ -51,6 +51,8 @@ export interface BentoTile {
   imageUrl?: string;
   icon: IconKey;
   scale: number;
+  /** Title font weight (variable-font axis value). */
+  weight: number;
 }
 
 export interface BentoProject {
@@ -81,6 +83,7 @@ const baseTile: Omit<BentoTile, "id" | "kind" | "title"> = {
   imageFit: "cover",
   icon: "spark",
   scale: 1,
+  weight: 760,
 };
 
 export function makeTile(tile: Partial<BentoTile> & Pick<BentoTile, "id" | "kind" | "title">): BentoTile {
@@ -125,6 +128,13 @@ export const toneOptions: Array<{ value: TileTone; label: string }> = [
   { value: "green", label: "Green" },
   { value: "pink", label: "Pink" },
   { value: "silver", label: "Silver" },
+];
+
+export const weightOptions: Array<{ value: string; label: string }> = [
+  { value: "560", label: "Medium" },
+  { value: "660", label: "Semibold" },
+  { value: "760", label: "Bold" },
+  { value: "860", label: "Heavy" },
 ];
 
 export const stageOptions: Array<{ value: StageTone; label: string }> = [
@@ -200,7 +210,7 @@ export const presets: BentoPreset[] = [
           colSpan: 4,
           rowSpan: 1,
           tone: "white",
-          accent: "#8fff00",
+          accent: "#30d158",
           icon: "activity",
         }),
         makeTile({
@@ -210,7 +220,7 @@ export const presets: BentoPreset[] = [
           colSpan: 2,
           rowSpan: 1,
           tone: "white",
-          accent: "#073bff",
+          accent: "#0a84ff",
           icon: "activity",
         }),
         makeTile({
@@ -220,14 +230,14 @@ export const presets: BentoPreset[] = [
           colSpan: 2,
           rowSpan: 1,
           tone: "white",
-          accent: "#0d45ff",
+          accent: "#0a84ff",
           icon: "shield",
         }),
         makeTile({
           id: "airpods-translation",
           kind: "feature",
           title: "Live Translation",
-          kicker: "Hola -> Hello",
+          kicker: "Hola → Hello",
           colSpan: 4,
           rowSpan: 2,
           tone: "white",
@@ -241,7 +251,7 @@ export const presets: BentoPreset[] = [
           colSpan: 4,
           rowSpan: 2,
           tone: "white",
-          accent: "#c6ccd8",
+          accent: "#6e7683",
           icon: "audio",
           scale: 0.74,
         }),
@@ -341,7 +351,7 @@ export const presets: BentoPreset[] = [
           id: "ios-satellite",
           kind: "image",
           title: "Messages via satellite",
-          colSpan: 3,
+          colSpan: 4,
           rowSpan: 2,
           tone: "ink",
           accent: "#34c759",
@@ -415,7 +425,7 @@ export const presets: BentoPreset[] = [
           kind: "image",
           title: "Control Center customization",
           colSpan: 3,
-          rowSpan: 2,
+          rowSpan: 1,
           tone: "blue",
           accent: "#00c7be",
           icon: "chip",
@@ -435,8 +445,8 @@ export const presets: BentoPreset[] = [
           id: "ios-home",
           kind: "product",
           title: "Home Screen customization",
-          colSpan: 4,
-          rowSpan: 2,
+          colSpan: 5,
+          rowSpan: 1,
           tone: "white",
           accent: "#111111",
           icon: "camera",
@@ -494,6 +504,18 @@ export const presets: BentoPreset[] = [
           scale: 0.8,
         }),
         makeTile({
+          id: "mac-speed",
+          kind: "metric",
+          title: "3x",
+          body: "Faster than M1",
+          colSpan: 2,
+          rowSpan: 1,
+          tone: "white",
+          accent: "#ff9f0a",
+          icon: "activity",
+          scale: 0.8,
+        }),
+        makeTile({
           id: "mac-display",
           kind: "headline",
           title: "Liquid Retina XDR",
@@ -504,6 +526,16 @@ export const presets: BentoPreset[] = [
           align: "start",
           icon: "spark",
           scale: 0.72,
+        }),
+        makeTile({
+          id: "mac-mics",
+          kind: "icon",
+          title: "Studio-quality mics",
+          colSpan: 2,
+          rowSpan: 1,
+          tone: "white",
+          accent: "#bf5af2",
+          icon: "audio",
         }),
         makeTile({
           id: "mac-ai",
@@ -537,16 +569,6 @@ export const presets: BentoPreset[] = [
           icon: "chip",
         }),
         makeTile({
-          id: "mac-thermal",
-          kind: "image",
-          title: "Cool and quiet",
-          colSpan: 3,
-          rowSpan: 2,
-          tone: "blue",
-          accent: "#64d2ff",
-          icon: "activity",
-        }),
-        makeTile({
           id: "mac-carbon",
           kind: "metric",
           title: "50%",
@@ -556,6 +578,16 @@ export const presets: BentoPreset[] = [
           tone: "white",
           accent: "#30d158",
           icon: "shield",
+        }),
+        makeTile({
+          id: "mac-thermal",
+          kind: "image",
+          title: "Cool and quiet",
+          colSpan: 3,
+          rowSpan: 2,
+          tone: "blue",
+          accent: "#64d2ff",
+          icon: "activity",
         }),
         makeTile({
           id: "mac-finish",
@@ -568,6 +600,18 @@ export const presets: BentoPreset[] = [
           align: "end",
           icon: "spark",
           scale: 0.72,
+        }),
+        makeTile({
+          id: "mac-quote",
+          kind: "headline",
+          title: "Mind-blowing. Head-turning.",
+          colSpan: 6,
+          rowSpan: 2,
+          tone: "blue",
+          accent: "#5ac8fa",
+          align: "center",
+          icon: "spark",
+          scale: 1.1,
         }),
       ],
     },
